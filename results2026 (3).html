@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Files 2026 — DAV Haldwani</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #1a1a1a;
+  --border: #222222;
+  --border2: #2a2a2a;
+  --text: #f0f0f0;
+  --text2: #888;
+  --text3: #555;
+  --accent: #e8ff47;
+  --red: #ff4444;
+  --green: #44ff88;
+  --orange: #ff8844;
+  --blue: #4488ff;
+  --pcm: #4488ff;
+  --pcb: #44ff88;
+  --com: #ff8844;
+  --hum: #cc88ff;
+  --pcm-bg: #0a1830;
+  --pcb-bg: #081a10;
+  --com-bg: #1a0e05;
+  --hum-bg: #120a1a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.header {
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 1.5rem 0;
+  position: sticky;
+  top: 0;
+  background: rgba(10,10,10,0.96);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  font-size: clamp(18px, 4vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+
+.header-sub {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tab:hover { color: var(--text2); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* MAIN */
+.main { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+
+/* PANELS */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* SEARCH */
+.search-box {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.search-box input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 14px 18px 14px 48px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-box input:focus { border-color: var(--accent); }
+.search-box input::placeholder { color: var(--text3); }
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 18px;
+}
+
+/* RESULT CARD */
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-left { display: flex; align-items: center; gap: 12px; }
+
+.stream-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-PCM { background: var(--pcm); }
+.dot-PCB { background: var(--pcb); }
+.dot-Commerce { background: var(--com); }
+.dot-Humanities { background: var(--hum); }
+
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.card-meta {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+
+.card-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.pct-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+}
+.pct-high { color: var(--green); }
+.pct-mid { color: var(--accent); }
+.pct-low { color: var(--orange); }
+.pct-fail { color: var(--red); }
+
+.result-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.rb-pass { background: rgba(68,255,136,0.12); color: var(--green); border: 1px solid rgba(68,255,136,0.2); }
+.rb-comp { background: rgba(255,136,68,0.12); color: var(--orange); border: 1px solid rgba(255,136,68,0.2); }
+.rb-er { background: rgba(255,68,68,0.12); color: var(--red); border: 1px solid rgba(255,68,68,0.2); }
+
+.card-body { padding: 12px 16px; }
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sub-cell {
+  background: var(--surface2);
+  border-radius: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+}
+.sub-cell.rt-flag { border-color: rgba(255,68,68,0.4); background: rgba(255,68,68,0.06); }
+.sub-cell.grace-flag { border-color: rgba(255,136,68,0.4); background: rgba(255,136,68,0.06); }
+.sub-cell.optional-sub { opacity: 0.7; }
+.sub-cell.optional-sub.best-opt { opacity: 1; border-style: dashed; }
+
+.sub-name {
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.sub-scores {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+}
+.sub-scores .th { color: var(--text2); }
+.sub-scores .sep { color: var(--text3); margin: 0 2px; }
+.sub-scores .pr { color: var(--text2); }
+.sub-scores .tot { color: var(--text); font-weight: 700; }
+.sub-scores .rt-tag { color: var(--red); font-size: 10px; margin-left: 4px; }
+.sub-grade { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+.pct-line {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.pct-line span { color: var(--accent); }
+
+.stream-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.st-PCM { background: var(--pcm-bg); color: var(--pcm); border: 1px solid rgba(68,136,255,0.2); }
+.st-PCB { background: var(--pcb-bg); color: var(--pcb); border: 1px solid rgba(68,255,136,0.2); }
+.st-Commerce { background: var(--com-bg); color: var(--com); border: 1px solid rgba(255,136,68,0.2); }
+.st-Humanities { background: var(--hum-bg); color: var(--hum); border: 1px solid rgba(204,136,255,0.2); }
+
+/* DISAMBIGUATION */
+.disambig {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.disambig p { color: var(--text2); margin-bottom: 12px; font-size: 14px; }
+.disambig-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.disambig-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.disambig-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 1.5rem 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* RANK LIST */
+.rank-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: slideUp 0.2s ease;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.rank-card:hover { border-color: var(--border2); }
+.rank-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 32px;
+  text-align: center;
+}
+.rank-1 { color: #ffd700; }
+.rank-2 { color: #c0c0c0; }
+.rank-3 { color: #cd7f32; }
+.rank-shame { color: var(--red); }
+.rank-info { flex: 1; }
+.rank-name { font-size: 14px; font-weight: 700; }
+.rank-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'Space Mono', monospace; }
+.rank-pct { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; }
+
+/* GRACE / ROAST */
+.roast-header {
+  background: linear-gradient(135deg, #1a0505, #0a0a0a);
+  border: 1px solid rgba(255,68,68,0.3);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.roast-header h2 { font-size: 18px; font-weight: 800; color: var(--red); margin-bottom: 4px; }
+.roast-header p { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
+
+.grace-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,68,68,0.2);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  animation: slideUp 0.2s ease;
+}
+.grace-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.grace-name { font-size: 15px; font-weight: 700; }
+.grace-count {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,68,68,0.15);
+  color: var(--red);
+  border: 1px solid rgba(255,68,68,0.3);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.grace-subjects { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.grace-sub-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  background: rgba(255,68,68,0.08);
+  border: 1px solid rgba(255,68,68,0.2);
+  color: var(--orange);
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+.roast-line {
+  font-size: 12px;
+  color: var(--text3);
+  font-style: italic;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.roast-line .skull { margin-right: 6px; }
+
+/* BOTTOM 10 */
+.bot-header {
+  background: linear-gradient(135deg, #0a0510, #0a0a0a);
+  border: 1px solid rgba(204,136,255,0.2);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.bot-header h2 { font-size: 18px; font-weight: 800; color: var(--hum); margin-bottom: 4px; }
+.bot-header p { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
+
+/* EMPTY */
+.empty-state {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--text3);
+}
+.empty-state div { font-size: 32px; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+
+/* ALL STUDENTS */
+.all-stream-section { margin-bottom: 2rem; }
+.all-stream-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.ast-PCM { background: var(--pcm-bg); color: var(--pcm); }
+.ast-PCB { background: var(--pcb-bg); color: var(--pcb); }
+.ast-Commerce { background: var(--com-bg); color: var(--com); }
+.ast-Humanities { background: var(--hum-bg); color: var(--hum); }
+
+.all-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.all-row:hover { background: var(--surface2); }
+.all-row:first-of-type { border-top: 1px solid var(--border); border-radius: 4px 4px 0 0; }
+.all-row:last-of-type { border-radius: 0 0 4px 4px; }
+.all-name { flex: 1; font-size: 13px; font-weight: 600; }
+.all-pct { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--text2); margin-right: 8px; }
+.all-result { font-size: 10px; font-weight: 700; }
+
+/* MULTI GRACE HEADER */
+.multi-grace-header {
+  background: linear-gradient(135deg, #150505, #0a0a0a);
+  border: 1px solid rgba(255,68,68,0.4);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.multi-grace-header h2 { font-size: 18px; font-weight: 800; color: var(--red); margin-bottom: 4px; }
+.multi-grace-header p { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.joker-emoji { font-size: 40px; display: block; margin-bottom: 8px; }
+
+/* CONSENT OVERLAY */
+#consent-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+.consent-box {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  max-width: 480px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+.consent-progress { height: 3px; background: var(--border); }
+.consent-progress-bar { height: 100%; background: var(--accent); transition: width 0.4s ease; }
+.consent-body { padding: 2rem; }
+.consent-slide { display: none; }
+.consent-slide.active { display: block; }
+.consent-step { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.consent-title { font-size: 18px; font-weight: 800; color: var(--accent); margin-bottom: 12px; letter-spacing: -0.02em; }
+.consent-text { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.consent-text strong { color: var(--text); }
+.consent-footer { padding: 1rem 2rem 1.5rem; display: flex; gap: 8px; justify-content: flex-end; }
+.consent-btn { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.06em; }
+.consent-btn-decline { background: transparent; color: var(--text3); border: 1px solid var(--border2); }
+.consent-btn-decline:hover { color: var(--red); border-color: var(--red); }
+.consent-btn-accept { background: var(--accent); color: #0a0a0a; }
+.consent-btn-accept:hover { opacity: 0.88; }
+
+/* ABOUT */
+.about-wrap { padding-bottom: 2rem; }
+.about-hero { background: linear-gradient(135deg, #0f0f0f, #111); border: 1px solid var(--border2); border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; }
+.about-hero h2 { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; margin-bottom: 6px; }
+.about-hero p { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
+.faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+.faq-q { padding: 14px 16px; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; user-select: none; }
+.faq-q:hover { background: var(--surface2); }
+.faq-q .arrow { color: var(--text3); transition: transform 0.2s; font-size: 12px; }
+.faq-q.open .arrow { transform: rotate(180deg); color: var(--accent); }
+.faq-a { display: none; padding: 0 16px 14px; font-size: 13px; color: var(--text2); line-height: 1.7; border-top: 1px solid var(--border); }
+.faq-a a { color: var(--accent); text-decoration: none; }
+.faq-a a:hover { text-decoration: underline; }
+.faq-a.open { display: block; }
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="login-gate" style="position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;align-items:center;justify-content:center;padding:1.5rem;">
+  <div style="max-width:400px;width:100%;animation:slideUp 0.3s ease;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div style="font-size:32px;margin-bottom:8px;">📂</div>
+      <h1 style="font-size:22px;font-weight:800;color:var(--accent);letter-spacing:-0.02em;">RESULT FILES 2026</h1>
+      <p style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px;">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1.5rem;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Verification Required</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Space Mono',monospace;">Roll Number</label>
+        <input id="login-roll" type="text" placeholder="e.g. 25640515" style="width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:14px;padding:10px 12px;border-radius:4px;outline:none;" />
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Space Mono',monospace;">Admit Card ID</label>
+        <input id="login-admit" type="password" placeholder="Your admit card ID" style="width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:14px;padding:10px 12px;border-radius:4px;outline:none;" />
+      </div>
+      <button onclick="attemptLogin()" style="width:100%;background:var(--accent);color:#0a0a0a;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;padding:12px;border:none;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;">Verify &amp; Enter</button>
+      <div id="login-error" style="font-size:12px;color:var(--red);text-align:center;margin-top:10px;font-family:'Space Mono',monospace;min-height:16px;"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);text-align:center;">
+        <span style="font-size:11px;color:var(--text3);">Don't have access? This dashboard is for DAV Haldwani Class XII students only.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO SLIDES -->
+<div id="intro-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.96);z-index:9999;display:none;align-items:center;justify-content:center;padding:1.5rem;">
+  <div class="consent-box" style="max-width:520px;">
+    <div class="consent-progress"><div class="consent-progress-bar" id="intro-bar" style="width:20%"></div></div>
+    <div class="consent-body">
+      <div class="consent-step" id="intro-step">Step 1 of 5</div>
+      <div id="intro-slides-wrap"></div>
+    </div>
+    <div class="consent-footer">
+      <button class="consent-btn consent-btn-decline" id="intro-prev" onclick="introNav(-1)" style="display:none;">← Back</button>
+      <button class="consent-btn consent-btn-accept" id="intro-next" onclick="introNav(1)">Understood →</button>
+    </div>
+  </div>
+</div>
+
+<div class="header" id="main-header" style="display:none;">
+  <div class="header-top">
+    <h1>RESULT FILES 2026</h1>
+    <span class="header-sub">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('search',this)">🔍 Search</button>
+    <button class="tab" onclick="switchTab('all',this)">📋 All Students</button>
+    <button class="tab" onclick="switchTab('top',this)">🏆 Top Performers</button>
+    <button class="tab" onclick="switchTab('bottom',this)">💀 Bottom 10</button>
+    <button class="tab" onclick="switchTab('grace',this)">🃏 Dhakka Gang</button>
+    <button class="tab" onclick="switchTab('multigrace',this)">📊 Deficit Analysis</button>
+    <button class="tab" onclick="switchTab('stats',this)">📈 Statistics</button>
+    <button class="tab" onclick="switchTab('about',this)">❓ About</button>
+  </div>
+</div>
+
+<div class="main" id="main-content" style="display:none;">
+
+  <!-- SEARCH -->
+  <div id="panel-search" class="panel active">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="Type full name to search..." oninput="handleSearch()" autocomplete="off" />
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- ALL STUDENTS -->
+  <div id="panel-all" class="panel">
+    <div id="all-content"></div>
+  </div>
+
+  <!-- TOP -->
+  <div id="panel-top" class="panel">
+    <div id="top-content"></div>
+  </div>
+
+  <!-- BOTTOM 10 -->
+  <div id="panel-bottom" class="panel">
+    <div id="bottom-content"></div>
+  </div>
+
+  <!-- GRACE / DHAKKA -->
+  <div id="panel-grace" class="panel">
+    <div id="grace-content"></div>
+  </div>
+
+  <!-- DEFICIT ANALYSIS -->
+  <div id="panel-multigrace" class="panel">
+    <div id="multigrace-content"></div>
+  </div>
+
+  <!-- STATISTICS -->
+  <div id="panel-stats" class="panel">
+    <div id="stats-content"></div>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="panel-about" class="panel">
+    <div class="about-wrap" id="about-content"></div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+// Subject codes
+const INTERNAL = [500,502,503]; // Work Exp, Health, General Studies
+const CORE_MAP = {
+  PCM: [41,42,43],       // Maths, Physics, Chemistry
+  PCB: [42,43,44],       // Physics, Chemistry, Biology
+  Commerce: [30,54,55],  // Economics, Business Studies, Accountancy
+  Humanities: [27,28,29] // History, Political Science, Geography
+};
+const ENGLISH_CODE = 301;
+
+// PASSING THEORY MARKS (out of theory max)
+// 23/70 for lab subjects, 26/80 for 80-mark theory subjects
+const PASS_THEORY = {
+  301: 26, // English Core (80)
+  302: 26, // Hindi Core (80)
+  27: 26,  // History
+  28: 26,  // Political Science
+  29: 23,  // Geography (70)
+  30: 26,  // Economics
+  34: 18,  // Hindustani Music Vocal (pass ~25% of theory)
+  41: 26,  // Mathematics
+  42: 23,  // Physics
+  43: 23,  // Chemistry
+  44: 23,  // Biology
+  48: 23,  // Physical Education
+  49: 23,  // Painting
+  54: 26,  // Business Studies
+  55: 26,  // Accountancy
+  83: 23,  // Computer Science
+  241: 26, // Applied Mathematics
+  811: 23, // Banking
+  828: 23, // Medical Diagnostics
+  841: 18, // Yoga
+  843: 18, // Artificial Intelligence
+};
+
+const SUB_NAMES = {
+  301:'English',302:'Hindi',27:'History',28:'Pol. Science',29:'Geography',
+  30:'Economics',34:'Hindustani Music',41:'Mathematics',42:'Physics',
+  43:'Chemistry',44:'Biology',48:'Physical Education',49:'Painting',
+  54:'Business Studies',55:'Accountancy',83:'Computer Science',
+  241:'Applied Maths',811:'Banking',828:'Medical Diagnostics',
+  841:'Yoga',843:'AI',500:'Work Experience',502:'Health & PE',503:'General Studies'
+};
+
+const ROAST_LINES = [
+  "Bhai theory mein itna chhota score — practical ne mercy dikhaayi, tujhe nahi.",
+  "Theory paper dekh ke pencil ko bhi sharam aa gayi.",
+  "23 leke pass? Bhai luck bhi thak gaya hoga.",
+  "Marks itne kam hain ki CBSE ko khud doubt hua pass karna chahiye ya nahi.",
+  "Ye result dekh ke future bhi plans cancel kar raha hai.",
+  "Theory mein itna scored — even the answer sheet felt empty inside.",
+  "Bhai ye marks hain ya PIN code?",
+  "23 marks — even a coin toss would've done better.",
+  "Passing marks se sirf ek aage — ek aur galat answer aur history hoti.",
+  "Bhai tera result ek motivational poster ka villain ban sakta hai.",
+  "Theory marks itne low hain ki practical ne CPR kiya.",
+  "Ye score dekh ke examiner ne bhi ek baar aankhein band ki.",
+  "Pass hua, par kaise — ye toh CBSE ko bhi nahi pata.",
+  "Bhai ye grace marks hain ya divine intervention?",
+  "Marks itne edge pe hain — ek sneeze aur compartment hoti.",
+];
+
+const MULTI_ROASTS = [
+  "Bhai multiple subjects mein bottom scraping — ye consistency bhi toh talent hai.",
+  "2+ subjects mein grace — at this point CBSE is carrying you on their back.",
+  "Alag alag subjects, same energy — barely alive in all of them.",
+  "Diverse grace marks portfolio. Broadly underperforming. Truly well-rounded.",
+  "Bhai itne subjects mein barely passed — even your marksheet looks embarrassed.",
+  "Multiple grace marks — not a skill issue, it's an art form at this point.",
+  "Collected grace marks in multiple subjects like they were Pokémon cards.",
+  "Subject ke baad subject — barely surviving each one. Respect, in a horrified way.",
+];
+
+function getRoast() { return ROAST_LINES[Math.floor(Math.random()*ROAST_LINES.length)]; }
+function getMultiRoast() { return MULTI_ROASTS[Math.floor(Math.random()*MULTI_ROASTS.length)]; }
+
+// ============================================================
+// STUDENT DATA
+// ============================================================
+const students = [
+// PCM
+{roll:'25640515',name:'Ankur Sharma',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:54,pr:20,tot:74,gr:'C1',rt:false},
+  {c:41,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:42,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:43,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:48,th:52,pr:30,tot:82,gr:'B2',rt:false},
+  {c:843,th:34,pr:48,tot:82,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640516',name:'Anshul Bisht',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:47,pr:19,tot:66,gr:'D1',rt:false},
+  {c:41,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:46,pr:29,tot:75,gr:'C1',rt:false},
+  {c:841,th:43,pr:49,tot:92,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640517',name:'Arjun Joshi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:61,pr:20,tot:81,gr:'B2',rt:false},
+  {c:41,th:47,pr:20,tot:67,gr:'B1',rt:false},
+  {c:42,th:31,pr:30,tot:61,gr:'B2',rt:false},
+  {c:43,th:45,pr:30,tot:75,gr:'B1',rt:false},
+  {c:83,th:53,pr:30,tot:83,gr:'B1',rt:false},
+  {c:843,th:49,pr:50,tot:99,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640518',name:'Ayush Bhatt',stream:'PCM',result:'COMP',subs:[
+  {c:301,th:40,pr:18,tot:58,gr:'D1',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:11,pr:27,tot:38,gr:'E',rt:true},
+  {c:48,th:29,pr:28,tot:57,gr:'D2',rt:false},
+  {c:843,th:17,pr:45,tot:62,gr:'D2',rt:false},
+  {c:41,th:17,pr:18,tot:35,gr:'E',rt:true,add:true},
+]},
+{roll:'25640519',name:'Damini Bahuguna',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:34,th:28,pr:70,tot:98,gr:'A1',rt:false},
+  {c:41,th:52,pr:20,tot:72,gr:'B1',rt:false},
+  {c:42,th:37,pr:30,tot:67,gr:'B1',rt:false},
+  {c:43,th:40,pr:30,tot:70,gr:'B1',rt:false},
+  {c:843,th:50,pr:48,tot:98,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640520',name:'Disha Upadhyay',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:71,pr:20,tot:91,gr:'A2',rt:false},
+  {c:41,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:42,th:27,pr:30,tot:57,gr:'C1',rt:false},
+  {c:43,th:26,pr:30,tot:56,gr:'C2',rt:false},
+  {c:48,th:58,pr:30,tot:88,gr:'A2',rt:false},
+  {c:841,th:45,pr:50,tot:95,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640521',name:'Divy Joshi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:46,pr:19,tot:65,gr:'D1',rt:false},
+  {c:42,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:43,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:48,th:52,pr:29,tot:81,gr:'B2',rt:false},
+  {c:841,th:39,pr:48,tot:87,gr:'C1',rt:false},
+  {c:41,th:14,pr:17,tot:31,gr:'E',rt:true,add:true},
+]},
+{roll:'25640522',name:'Divya Rawat',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:41,th:38,pr:18,tot:56,gr:'C1',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:28,pr:28,tot:56,gr:'C2',rt:false},
+  {c:48,th:58,pr:30,tot:88,gr:'A2',rt:false},
+  {c:843,th:45,pr:47,tot:92,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640523',name:'Gaurav Joshi',stream:'PCM',result:'PASS',nickname:'Chotu',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:41,th:67,pr:20,tot:87,gr:'A1',rt:false},
+  {c:42,th:48,pr:30,tot:78,gr:'A2',rt:false},
+  {c:43,th:52,pr:30,tot:82,gr:'A2',rt:false},
+  {c:83,th:56,pr:30,tot:86,gr:'B1',rt:false},
+  {c:843,th:40,pr:50,tot:90,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640524',name:'Gaurav Suyal',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:59,pr:20,tot:79,gr:'B2',rt:false},
+  {c:41,th:39,pr:20,tot:59,gr:'C1',rt:false},
+  {c:42,th:35,pr:30,tot:65,gr:'B1',rt:false},
+  {c:43,th:45,pr:30,tot:75,gr:'B1',rt:false},
+  {c:83,th:40,pr:30,tot:70,gr:'C1',rt:false},
+  {c:843,th:29,pr:49,tot:78,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640525',name:'Gautam Singh Bisht',stream:'PCM',result:'COMP',subs:[
+  {c:301,th:43,pr:18,tot:61,gr:'D1',rt:false},
+  {c:41,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:42,th:11,pr:27,tot:38,gr:'E',rt:true},
+  {c:48,th:43,pr:29,tot:72,gr:'C2',rt:false},
+  {c:841,th:28,pr:48,tot:76,gr:'D2',rt:false},
+  {c:43,th:7,pr:27,tot:34,gr:'E',rt:true,add:true},
+]},
+{roll:'25640526',name:'Harshita Bhandari',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:41,th:57,pr:20,tot:77,gr:'A2',rt:false},
+  {c:42,th:56,pr:30,tot:86,gr:'A1',rt:false},
+  {c:43,th:57,pr:30,tot:87,gr:'A1',rt:false},
+  {c:83,th:53,pr:29,tot:82,gr:'B1',rt:false},
+  {c:841,th:44,pr:50,tot:94,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640527',name:'Harshvardhan Singh Rathore',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:64,pr:20,tot:84,gr:'B1',rt:false},
+  {c:41,th:28,pr:19,tot:47,gr:'D1',rt:false},
+  {c:42,th:37,pr:29,tot:66,gr:'B1',rt:false},
+  {c:43,th:31,pr:29,tot:60,gr:'C1',rt:false},
+  {c:48,th:60,pr:30,tot:90,gr:'A2',rt:false},
+  {c:841,th:45,pr:50,tot:95,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640528',name:'Hrishekesh Singh Nayal',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:41,th:55,pr:20,tot:75,gr:'A2',rt:false},
+  {c:42,th:37,pr:30,tot:67,gr:'B1',rt:false},
+  {c:43,th:53,pr:30,tot:83,gr:'A2',rt:false},
+  {c:83,th:50,pr:30,tot:80,gr:'B2',rt:false},
+  {c:843,th:48,pr:50,tot:98,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640529',name:'Jainesh Pratap Singh Bisht',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:54,pr:19,tot:73,gr:'C2',rt:false},
+  {c:41,th:50,pr:20,tot:70,gr:'B1',rt:false},
+  {c:42,th:47,pr:30,tot:77,gr:'A2',rt:false},
+  {c:43,th:41,pr:30,tot:71,gr:'B1',rt:false},
+  {c:48,th:50,pr:28,tot:78,gr:'C1',rt:false},
+  {c:841,th:19,pr:49,tot:68,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640530',name:'Kavya Singh Mehta',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:61,pr:19,tot:80,gr:'B2',rt:false},
+  {c:41,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:48,th:46,pr:29,tot:75,gr:'C1',rt:false},
+  {c:841,th:26,pr:49,tot:75,gr:'D2',rt:false},
+  {c:43,th:12,pr:28,tot:40,gr:'E',rt:true,add:true},
+]},
+{roll:'25640531',name:'Krishna Rana',stream:'PCM',result:'COMP',subs:[
+  {c:301,th:36,pr:18,tot:54,gr:'D2',rt:false},
+  {c:42,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:43,th:6,pr:28,tot:34,gr:'E',rt:true},
+  {c:48,th:37,pr:28,tot:65,gr:'D1',rt:false},
+  {c:843,th:30,pr:45,tot:75,gr:'D2',rt:false},
+  {c:41,th:6,pr:18,tot:24,gr:'E',rt:true,add:true},
+]},
+{roll:'25640532',name:'Lakshya Pant',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:73,pr:20,tot:93,gr:'A1',rt:false},
+  {c:41,th:30,pr:20,tot:50,gr:'C2',rt:false},
+  {c:42,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:43,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:83,th:55,pr:30,tot:85,gr:'B1',rt:false},
+  {c:843,th:47,pr:50,tot:97,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640533',name:'Manas Tiwari',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:61,pr:19,tot:80,gr:'B2',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:48,pr:30,tot:78,gr:'C1',rt:false},
+  {c:841,th:38,pr:49,tot:87,gr:'C1',rt:false},
+  {c:41,th:15,pr:18,tot:33,gr:'E',rt:true,add:true},
+]},
+{roll:'25640534',name:'Manvendra Singh Negi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:70,pr:20,tot:90,gr:'A2',rt:false},
+  {c:41,th:42,pr:19,tot:61,gr:'B2',rt:false},
+  {c:42,th:32,pr:29,tot:61,gr:'B2',rt:false},
+  {c:43,th:25,pr:30,tot:55,gr:'D1',rt:false},
+  {c:83,th:30,pr:30,tot:60,gr:'D1',rt:false},
+  {c:843,th:43,pr:49,tot:92,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640535',name:'Neha Negi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:34,th:24,pr:69,tot:93,gr:'A2',rt:false},
+  {c:41,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:841,th:39,pr:50,tot:89,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640536',name:'Nitin Mehta',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:37,pr:18,tot:55,gr:'D2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:39,pr:30,tot:69,gr:'C2',rt:false},
+  {c:841,th:42,pr:48,tot:90,gr:'B2',rt:false},
+  {c:41,th:15,pr:18,tot:33,gr:'E',rt:true,add:true},
+]},
+{roll:'25640537',name:'Pawan Badhani',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:53,pr:20,tot:73,gr:'C2',rt:false},
+  {c:41,th:66,pr:20,tot:86,gr:'A1',rt:false},
+  {c:42,th:54,pr:30,tot:84,gr:'A1',rt:false},
+  {c:43,th:55,pr:30,tot:85,gr:'A2',rt:false},
+  {c:48,th:63,pr:30,tot:93,gr:'A1',rt:false},
+  {c:843,th:43,pr:50,tot:93,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640538',name:'Prachi Pandey',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:47,pr:20,tot:67,gr:'C2',rt:false},
+  {c:302,th:40,pr:20,tot:60,gr:'D1',rt:false},
+  {c:41,th:31,pr:19,tot:50,gr:'C2',rt:false},
+  {c:42,th:29,pr:30,tot:59,gr:'C1',rt:false},
+  {c:43,th:28,pr:30,tot:58,gr:'C2',rt:false},
+  {c:843,th:33,pr:47,tot:80,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640539',name:'Priyanshi Joshi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:41,th:46,pr:20,tot:66,gr:'B2',rt:false},
+  {c:42,th:41,pr:30,tot:71,gr:'A2',rt:false},
+  {c:43,th:46,pr:30,tot:76,gr:'B1',rt:false},
+  {c:48,th:66,pr:30,tot:96,gr:'A1',rt:false},
+  {c:843,th:50,pr:50,tot:100,gr:'A1',rt:false,add:true},
+]},
+{roll:'25640540',name:'Ragini Varshney',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:64,pr:20,tot:84,gr:'B1',rt:false},
+  {c:41,th:54,pr:20,tot:74,gr:'B1',rt:false},
+  {c:42,th:35,pr:30,tot:65,gr:'B1',rt:false},
+  {c:43,th:49,pr:30,tot:79,gr:'A2',rt:false},
+  {c:48,th:56,pr:30,tot:86,gr:'B1',rt:false},
+  {c:843,th:47,pr:48,tot:95,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640541',name:'Rahul Joshi',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:41,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:42,th:24,pr:28,tot:52,gr:'D1',rt:false},
+  {c:43,th:35,pr:29,tot:64,gr:'B2',rt:false},
+  {c:48,th:55,pr:30,tot:85,gr:'B1',rt:false},
+  {c:841,th:43,pr:50,tot:93,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640542',name:'Raj Singh Adhikari',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:60,pr:20,tot:80,gr:'B2',rt:false},
+  {c:41,th:26,pr:17,tot:43,gr:'D2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:43,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:48,th:56,pr:29,tot:85,gr:'B1',rt:false},
+  {c:841,th:39,pr:49,tot:88,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640543',name:'Saksham Pathak',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:41,th:46,pr:20,tot:66,gr:'B2',rt:false},
+  {c:42,th:33,pr:30,tot:63,gr:'B2',rt:false},
+  {c:43,th:30,pr:30,tot:60,gr:'C1',rt:false},
+  {c:48,th:62,pr:30,tot:92,gr:'A1',rt:false},
+  {c:843,th:47,pr:50,tot:97,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640544',name:'Tanish Bora',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:52,pr:19,tot:71,gr:'C2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:49,pr:29,tot:78,gr:'C1',rt:false},
+  {c:841,th:24,pr:49,tot:73,gr:'D2',rt:false},
+  {c:41,th:14,pr:19,tot:33,gr:'E',rt:true,add:true},
+]},
+{roll:'25640545',name:'Tarun Adhikari',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:56,pr:20,tot:76,gr:'C1',rt:false},
+  {c:41,th:38,pr:20,tot:58,gr:'C1',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:51,pr:28,tot:79,gr:'B2',rt:false},
+  {c:841,th:45,pr:48,tot:93,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640546',name:'Tulyansh Rai',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:55,pr:19,tot:74,gr:'C1',rt:false},
+  {c:41,th:27,pr:18,tot:45,gr:'D2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:43,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:49,th:23,pr:70,tot:93,gr:'B2',rt:false},
+  {c:841,th:38,pr:50,tot:88,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640547',name:'Yash Chandra',stream:'PCM',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:41,th:32,pr:20,tot:52,gr:'C2',rt:false},
+  {c:42,th:34,pr:28,tot:62,gr:'B2',rt:false},
+  {c:43,th:32,pr:30,tot:62,gr:'C1',rt:false},
+  {c:48,th:61,pr:30,tot:91,gr:'A1',rt:false},
+  {c:841,th:41,pr:49,tot:90,gr:'B2',rt:false,add:true},
+]},
+// PCB
+{roll:'25640548',name:'Chetna Takuli',stream:'PCB',result:'COMP',subs:[
+  {c:301,th:47,pr:20,tot:67,gr:'C2',rt:false},
+  {c:42,th:8,pr:28,tot:36,gr:'E',rt:true},
+  {c:44,th:28,pr:27,tot:55,gr:'D1',rt:false},
+  {c:48,th:43,pr:28,tot:71,gr:'C2',rt:false},
+  {c:828,th:22,pr:37,tot:59,gr:'D2',rt:false},
+  {c:43,th:8,pr:27,tot:35,gr:'E',rt:true,add:true},
+]},
+{roll:'25640549',name:'Devraj',stream:'PCB',result:'COMP',subs:[
+  {c:301,th:60,pr:19,tot:79,gr:'B2',rt:false},
+  {c:43,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:44,th:15,pr:27,tot:42,gr:'E',rt:true},
+  {c:48,th:52,pr:29,tot:81,gr:'B2',rt:false},
+  {c:828,th:28,pr:38,tot:66,gr:'D2',rt:false},
+  {c:42,th:12,pr:28,tot:40,gr:'E',rt:true,add:true},
+]},
+{roll:'25640550',name:'Gunjan Pathak',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:63,pr:19,tot:82,gr:'B2',rt:false},
+  {c:302,th:56,pr:19,tot:75,gr:'C1',rt:false},
+  {c:42,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:44,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:828,th:42,pr:38,tot:80,gr:'C1',rt:false},
+  {c:43,th:8,pr:28,tot:36,gr:'E',rt:true,add:true},
+]},
+{roll:'25640551',name:'Jiya Upreti',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:42,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:43,th:25,pr:28,tot:53,gr:'D1',rt:false},
+  {c:44,th:45,pr:30,tot:75,gr:'B2',rt:false},
+  {c:48,th:61,pr:30,tot:91,gr:'A1',rt:false},
+  {c:828,th:40,pr:40,tot:80,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640552',name:'Nimita Rautela',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:42,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:43,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:44,th:38,pr:30,tot:68,gr:'C1',rt:false},
+  {c:48,th:54,pr:30,tot:84,gr:'B1',rt:false},
+  {c:828,th:47,pr:40,tot:87,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640553',name:'Nirmala',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:64,pr:20,tot:84,gr:'B1',rt:false},
+  {c:34,th:29,pr:69,tot:98,gr:'A1',rt:false},
+  {c:42,th:38,pr:30,tot:68,gr:'B1',rt:false},
+  {c:43,th:31,pr:30,tot:61,gr:'C1',rt:false},
+  {c:44,th:52,pr:30,tot:82,gr:'B1',rt:false},
+  {c:828,th:44,pr:40,tot:84,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640554',name:'Nupur Bisht',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:61,pr:20,tot:81,gr:'B2',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:44,th:25,pr:28,tot:53,gr:'D2',rt:false},
+  {c:48,th:51,pr:29,tot:80,gr:'B2',rt:false},
+  {c:828,th:37,pr:39,tot:76,gr:'C2',rt:false},
+  {c:43,th:12,pr:29,tot:41,gr:'E',rt:true,add:true},
+]},
+{roll:'25640555',name:'Preeti Tamta',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:47,pr:19,tot:66,gr:'D1',rt:false},
+  {c:302,th:64,pr:19,tot:83,gr:'B2',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:44,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:828,th:26,pr:39,tot:65,gr:'D2',rt:false},
+  {c:43,th:8,pr:27,tot:35,gr:'E',rt:true,add:true},
+]},
+{roll:'25640556',name:'Raghav Upadhyay',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:42,th:24,pr:28,tot:52,gr:'D2',rt:false},
+  {c:43,th:24,pr:29,tot:53,gr:'D1',rt:false},
+  {c:44,th:43,pr:29,tot:72,gr:'B2',rt:false},
+  {c:83,th:40,pr:28,tot:68,gr:'C2',rt:false},
+  {c:828,th:43,pr:39,tot:82,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640557',name:'Rajeshwari Nayal',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:77,pr:20,tot:97,gr:'A1',rt:false},
+  {c:302,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:42,th:48,pr:30,tot:78,gr:'A2',rt:false},
+  {c:43,th:56,pr:30,tot:86,gr:'A2',rt:false},
+  {c:44,th:60,pr:30,tot:90,gr:'A2',rt:false},
+  {c:828,th:57,pr:40,tot:97,gr:'A1',rt:false,add:true},
+]},
+{roll:'25640558',name:'Rakshit Pandey',stream:'PCB',result:'COMP',subs:[
+  {c:301,th:38,pr:20,tot:58,gr:'D1',rt:false},
+  {c:42,th:10,pr:28,tot:38,gr:'E',rt:true},
+  {c:44,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:48,th:34,pr:28,tot:62,gr:'D1',rt:false},
+  {c:828,th:26,pr:38,tot:64,gr:'D2',rt:false},
+  {c:43,th:6,pr:28,tot:34,gr:'E',rt:true,add:true},
+]},
+{roll:'25640559',name:'Rishabh Singh Pangtey',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:65,pr:20,tot:85,gr:'B1',rt:false},
+  {c:42,th:24,pr:30,tot:54,gr:'C2',rt:false},
+  {c:43,th:40,pr:30,tot:70,gr:'B1',rt:false},
+  {c:44,th:54,pr:30,tot:84,gr:'A2',rt:false},
+  {c:48,th:50,pr:30,tot:80,gr:'B2',rt:false},
+  {c:828,th:47,pr:40,tot:87,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640560',name:'Riya Joshi',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:42,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:43,th:23,pr:30,tot:53,gr:'D1',rt:false},
+  {c:44,th:41,pr:30,tot:71,gr:'B2',rt:false},
+  {c:49,th:30,pr:70,tot:100,gr:'A1',rt:false},
+  {c:828,th:44,pr:40,tot:84,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640561',name:'Shubhangi Negi',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:302,th:76,pr:20,tot:96,gr:'A1',rt:false},
+  {c:42,th:50,pr:30,tot:80,gr:'A1',rt:false},
+  {c:43,th:58,pr:30,tot:88,gr:'A1',rt:false},
+  {c:44,th:67,pr:30,tot:97,gr:'A1',rt:false},
+  {c:828,th:46,pr:40,tot:86,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640562',name:'Sneha Bhandari',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:57,pr:20,tot:77,gr:'C1',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:44,th:24,pr:28,tot:52,gr:'D2',rt:false},
+  {c:48,th:48,pr:30,tot:78,gr:'C1',rt:false},
+  {c:828,th:33,pr:39,tot:72,gr:'D1',rt:false},
+  {c:43,th:5,pr:29,tot:34,gr:'E',rt:true,add:true},
+]},
+{roll:'25640563',name:'Vanshika Aswal',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:42,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:44,th:23,pr:28,tot:51,gr:'D2',rt:false},
+  {c:49,th:29,pr:70,tot:99,gr:'A1',rt:false},
+  {c:828,th:35,pr:38,tot:73,gr:'D1',rt:false},
+  {c:43,th:9,pr:27,tot:36,gr:'E',rt:true,add:true},
+]},
+{roll:'25640564',name:'Vineeta Bhatt',stream:'PCB',result:'PASS',subs:[
+  {c:301,th:55,pr:20,tot:75,gr:'C1',rt:false},
+  {c:42,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:43,th:23,pr:29,tot:52,gr:'D1',rt:false},
+  {c:44,th:31,pr:29,tot:60,gr:'C2',rt:false},
+  {c:48,th:45,pr:29,tot:74,gr:'C1',rt:false},
+  {c:828,th:27,pr:38,tot:65,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640616',name:'Harshit Joshi',stream:'PCB',result:'PASS',nickname:'Chotu',subs:[
+  {c:301,th:70,pr:20,tot:90,gr:'A2',rt:false},
+  {c:42,th:42,pr:30,tot:72,gr:'A2',rt:false},
+  {c:43,th:46,pr:30,tot:76,gr:'B1',rt:false},
+  {c:44,th:66,pr:30,tot:96,gr:'A1',rt:false},
+  {c:48,th:58,pr:30,tot:88,gr:'A2',rt:false},
+  {c:828,th:47,pr:40,tot:87,gr:'B1',rt:false,add:true},
+]},
+// COMMERCE
+{roll:'25640565',name:'Abdullah Ahmad',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:60,pr:20,tot:80,gr:'B2',rt:false},
+  {c:30,th:55,pr:20,tot:75,gr:'B1',rt:false},
+  {c:54,th:47,pr:20,tot:67,gr:'B2',rt:false},
+  {c:55,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:241,th:42,pr:20,tot:62,gr:'C2',rt:false},
+  {c:811,th:44,pr:40,tot:84,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640566',name:'Anika Joshi',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:44,pr:20,tot:64,gr:'D1',rt:false},
+  {c:30,th:31,pr:19,tot:50,gr:'D1',rt:false},
+  {c:48,th:43,pr:30,tot:73,gr:'C2',rt:false},
+  {c:54,th:26,pr:20,tot:46,gr:'D2',rt:false},
+  {c:841,th:40,pr:50,tot:90,gr:'B2',rt:false},
+  {c:55,th:8,pr:19,tot:27,gr:'E',rt:true,add:true},
+]},
+{roll:'25640567',name:'Aniket Joshi',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:38,pr:18,tot:56,gr:'D2',rt:false},
+  {c:30,th:32,pr:17,tot:49,gr:'D1',rt:false},
+  {c:48,th:27,pr:28,tot:55,gr:'D2',rt:false},
+  {c:54,th:33,pr:18,tot:51,gr:'D1',rt:false},
+  {c:55,th:26,pr:17,tot:43,gr:'D2',rt:false},
+  {c:841,th:27,pr:47,tot:74,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640568',name:'Babita',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:70,pr:20,tot:90,gr:'A2',rt:false},
+  {c:30,th:70,pr:20,tot:90,gr:'A1',rt:false},
+  {c:48,th:63,pr:30,tot:93,gr:'A1',rt:false},
+  {c:54,th:49,pr:20,tot:69,gr:'B2',rt:false},
+  {c:55,th:53,pr:20,tot:73,gr:'B1',rt:false},
+  {c:811,th:45,pr:40,tot:85,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640569',name:'Bhawesh Verma',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:58,pr:20,tot:78,gr:'C1',rt:false},
+  {c:30,th:42,pr:19,tot:61,gr:'C2',rt:false},
+  {c:54,th:29,pr:19,tot:48,gr:'D1',rt:false},
+  {c:55,th:28,pr:18,tot:46,gr:'D1',rt:false},
+  {c:241,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:811,th:34,pr:40,tot:74,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640570',name:'Deepak Singh',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:62,pr:20,tot:82,gr:'B2',rt:false},
+  {c:30,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:54,th:68,pr:20,tot:88,gr:'A2',rt:false},
+  {c:55,th:62,pr:20,tot:82,gr:'A2',rt:false},
+  {c:241,th:50,pr:20,tot:70,gr:'C1',rt:false},
+  {c:811,th:41,pr:40,tot:81,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640571',name:'Diksha Bora',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:71,pr:20,tot:91,gr:'A2',rt:false},
+  {c:30,th:78,pr:20,tot:98,gr:'A1',rt:false},
+  {c:48,th:65,pr:30,tot:95,gr:'A1',rt:false},
+  {c:54,th:67,pr:20,tot:87,gr:'A2',rt:false},
+  {c:55,th:73,pr:20,tot:93,gr:'A1',rt:false},
+  {c:811,th:51,pr:40,tot:91,gr:'A1',rt:false,add:true},
+]},
+{roll:'25640572',name:'Divyanshi Bisht',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:58,pr:20,tot:78,gr:'C1',rt:false},
+  {c:30,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:34,th:22,pr:70,tot:92,gr:'B1',rt:false},
+  {c:54,th:61,pr:19,tot:80,gr:'B1',rt:false},
+  {c:55,th:33,pr:20,tot:53,gr:'C1',rt:false},
+  {c:811,th:41,pr:40,tot:81,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640573',name:'Diya Kandpal',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:44,pr:20,tot:64,gr:'D1',rt:false},
+  {c:302,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:30,th:45,pr:19,tot:64,gr:'C1',rt:false},
+  {c:54,th:31,pr:19,tot:50,gr:'D1',rt:false},
+  {c:55,th:28,pr:19,tot:47,gr:'D1',rt:false},
+  {c:811,th:30,pr:35,tot:65,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640574',name:'Gaurav Joshi',stream:'Commerce',result:'PASS',nickname:'Lambu',subs:[
+  {c:301,th:61,pr:20,tot:81,gr:'B2',rt:false},
+  {c:30,th:56,pr:20,tot:76,gr:'B1',rt:false},
+  {c:48,th:48,pr:29,tot:77,gr:'C1',rt:false},
+  {c:54,th:42,pr:17,tot:59,gr:'C2',rt:false},
+  {c:55,th:28,pr:16,tot:44,gr:'D2',rt:false},
+  {c:811,th:33,pr:40,tot:73,gr:'C2',rt:false,add:true},
+]},
+{roll:'25640575',name:'Kanishka Bhojak',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:67,pr:20,tot:87,gr:'B1',rt:false},
+  {c:30,th:61,pr:19,tot:80,gr:'B1',rt:false},
+  {c:48,th:53,pr:29,tot:82,gr:'B2',rt:false},
+  {c:54,th:34,pr:19,tot:53,gr:'C2',rt:false},
+  {c:55,th:26,pr:17,tot:43,gr:'D2',rt:false},
+  {c:811,th:33,pr:35,tot:68,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640576',name:'Karan Pratap Singh',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:54,pr:20,tot:74,gr:'C1',rt:false},
+  {c:30,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:48,th:60,pr:30,tot:90,gr:'A2',rt:false},
+  {c:54,th:66,pr:20,tot:86,gr:'A2',rt:false},
+  {c:55,th:70,pr:20,tot:90,gr:'A1',rt:false},
+  {c:811,th:38,pr:40,tot:78,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640577',name:'Lalit Singh Mehta',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:66,pr:20,tot:86,gr:'B1',rt:false},
+  {c:30,th:72,pr:20,tot:92,gr:'A1',rt:false},
+  {c:48,th:58,pr:29,tot:87,gr:'A2',rt:false},
+  {c:54,th:57,pr:20,tot:77,gr:'B1',rt:false},
+  {c:55,th:35,pr:19,tot:54,gr:'C1',rt:false},
+  {c:811,th:39,pr:34,tot:73,gr:'C2',rt:false,add:true},
+]},
+{roll:'25640578',name:'Manish Kirmoliya',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:50,pr:19,tot:69,gr:'C2',rt:false},
+  {c:30,th:36,pr:18,tot:54,gr:'D1',rt:false},
+  {c:48,th:41,pr:28,tot:69,gr:'C2',rt:false},
+  {c:54,th:26,pr:17,tot:43,gr:'D2',rt:false},
+  {c:811,th:29,pr:33,tot:62,gr:'D2',rt:false},
+  {c:55,th:14,pr:16,tot:30,gr:'E',rt:true,add:true},
+]},
+{roll:'25640579',name:'Manisha Karnatak',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:69,pr:20,tot:89,gr:'A2',rt:false},
+  {c:30,th:73,pr:20,tot:93,gr:'A1',rt:false},
+  {c:54,th:66,pr:20,tot:86,gr:'A2',rt:false},
+  {c:55,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:83,th:44,pr:30,tot:74,gr:'C1',rt:false},
+  {c:811,th:47,pr:40,tot:87,gr:'A2',rt:false,add:true},
+]},
+{roll:'25640580',name:'Mayank Singh Airy',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:40,pr:19,tot:59,gr:'D1',rt:false},
+  {c:30,th:41,pr:18,tot:59,gr:'C2',rt:false},
+  {c:48,th:35,pr:27,tot:62,gr:'D1',rt:false},
+  {c:54,th:29,pr:17,tot:46,gr:'D2',rt:false},
+  {c:55,th:26,pr:16,tot:42,gr:'D2',rt:false},
+  {c:811,th:28,pr:33,tot:61,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640581',name:'Niharika Gurwant',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:74,pr:20,tot:94,gr:'A1',rt:false},
+  {c:30,th:75,pr:20,tot:95,gr:'A1',rt:false},
+  {c:54,th:62,pr:20,tot:82,gr:'A2',rt:false},
+  {c:55,th:65,pr:20,tot:85,gr:'A2',rt:false},
+  {c:83,th:58,pr:30,tot:88,gr:'A2',rt:false},
+  {c:811,th:42,pr:40,tot:82,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640582',name:'Nitin Goswami',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:60,pr:20,tot:80,gr:'B2',rt:false},
+  {c:30,th:62,pr:19,tot:81,gr:'A2',rt:false},
+  {c:48,th:52,pr:27,tot:79,gr:'B2',rt:false},
+  {c:54,th:72,pr:19,tot:91,gr:'A1',rt:false},
+  {c:55,th:58,pr:18,tot:76,gr:'B1',rt:false},
+  {c:811,th:30,pr:36,tot:66,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640583',name:'Rohit Fulara',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:39,pr:20,tot:59,gr:'D1',rt:false},
+  {c:30,th:50,pr:20,tot:70,gr:'B2',rt:false},
+  {c:48,th:35,pr:30,tot:65,gr:'D1',rt:false},
+  {c:54,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:841,th:21,pr:50,tot:71,gr:'D2',rt:false},
+  {c:55,th:11,pr:16,tot:27,gr:'E',rt:true,add:true},
+]},
+{roll:'25640584',name:'Rohit Singh',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:38,pr:18,tot:56,gr:'D2',rt:false},
+  {c:30,th:39,pr:17,tot:56,gr:'C2',rt:false},
+  {c:48,th:33,pr:28,tot:61,gr:'D1',rt:false},
+  {c:54,th:26,pr:17,tot:43,gr:'D2',rt:false},
+  {c:55,th:26,pr:15,tot:41,gr:'D2',rt:false},
+  {c:841,th:26,pr:48,tot:74,gr:'D2',rt:false,add:true},
+]},
+{roll:'25640585',name:'Sachin Rawat',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:54,pr:19,tot:73,gr:'C2',rt:false},
+  {c:30,th:47,pr:19,tot:66,gr:'C1',rt:false},
+  {c:48,th:47,pr:29,tot:76,gr:'C1',rt:false},
+  {c:54,th:37,pr:18,tot:55,gr:'C2',rt:false},
+  {c:55,th:27,pr:16,tot:43,gr:'D2',rt:false},
+  {c:811,th:38,pr:33,tot:71,gr:'C2',rt:false,add:true},
+]},
+{roll:'25640586',name:'Sneha',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:52,pr:20,tot:72,gr:'C2',rt:false},
+  {c:30,th:51,pr:20,tot:71,gr:'B2',rt:false},
+  {c:48,th:55,pr:28,tot:83,gr:'B1',rt:false},
+  {c:54,th:36,pr:20,tot:56,gr:'C2',rt:false},
+  {c:55,th:48,pr:20,tot:68,gr:'B1',rt:false},
+  {c:811,th:45,pr:39,tot:84,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640587',name:'Sonali Rajput',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:56,pr:20,tot:76,gr:'C1',rt:false},
+  {c:30,th:51,pr:20,tot:71,gr:'B2',rt:false},
+  {c:54,th:52,pr:19,tot:71,gr:'B2',rt:false},
+  {c:55,th:27,pr:20,tot:47,gr:'D1',rt:false},
+  {c:241,th:35,pr:19,tot:54,gr:'D1',rt:false},
+  {c:811,th:43,pr:38,tot:81,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640588',name:'Vicky Kumar Singh',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:32,pr:19,tot:51,gr:'D2',rt:false},
+  {c:30,th:30,pr:18,tot:48,gr:'D2',rt:false},
+  {c:48,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:54,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:811,th:23,pr:34,tot:57,gr:'D2',rt:false},
+  {c:55,th:11,pr:18,tot:29,gr:'E',rt:true,add:true},
+]},
+{roll:'25640589',name:'Vivek Singh',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:55,pr:20,tot:75,gr:'C1',rt:false},
+  {c:30,th:48,pr:20,tot:68,gr:'B2',rt:false},
+  {c:54,th:49,pr:20,tot:69,gr:'B2',rt:false},
+  {c:55,th:41,pr:18,tot:59,gr:'C1',rt:false},
+  {c:83,th:25,pr:28,tot:53,gr:'D2',rt:false},
+  {c:811,th:40,pr:39,tot:79,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640590',name:'Yashaswi Pandey',stream:'Commerce',result:'PASS',subs:[
+  {c:301,th:63,pr:20,tot:83,gr:'B2',rt:false},
+  {c:30,th:30,pr:20,tot:50,gr:'D1',rt:false},
+  {c:48,th:43,pr:29,tot:72,gr:'C2',rt:false},
+  {c:54,th:36,pr:19,tot:55,gr:'C2',rt:false},
+  {c:55,th:27,pr:18,tot:45,gr:'D2',rt:false},
+  {c:811,th:31,pr:38,tot:69,gr:'C2',rt:false,add:true},
+]},
+// HUMANITIES
+{roll:'25640602',name:'Lavantika Shah',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:63,pr:20,tot:83,gr:'B2',rt:false},
+  {c:27,th:35,pr:20,tot:55,gr:'C2',rt:false},
+  {c:28,th:45,pr:20,tot:65,gr:'B2',rt:false},
+  {c:29,th:45,pr:30,tot:75,gr:'B2',rt:false},
+  {c:48,th:60,pr:30,tot:90,gr:'A2',rt:false},
+  {c:841,th:40,pr:50,tot:90,gr:'B2',rt:false,add:true},
+]},
+{roll:'25640604',name:'Manav Yadav',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:46,pr:20,tot:66,gr:'D1',rt:false},
+  {c:27,th:40,pr:19,tot:59,gr:'C2',rt:false},
+  {c:28,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:29,th:27,pr:29,tot:56,gr:'D1',rt:false},
+  {c:48,th:40,pr:30,tot:70,gr:'C2',rt:false},
+  {c:841,th:27,pr:50,tot:77,gr:'D1',rt:false,add:true},
+]},
+{roll:'25640606',name:'Naina Bhatt',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:63,pr:19,tot:82,gr:'B2',rt:false},
+  {c:302,th:73,pr:20,tot:93,gr:'A1',rt:false},
+  {c:27,th:64,pr:20,tot:84,gr:'A2',rt:false},
+  {c:28,th:72,pr:20,tot:92,gr:'A1',rt:false},
+  {c:29,th:64,pr:30,tot:94,gr:'A1',rt:false},
+  {c:841,th:43,pr:49,tot:92,gr:'B1',rt:false,add:true},
+]},
+{roll:'25640615',name:'Vivek Bhatt',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:33,pr:20,tot:53,gr:'D2',rt:false},
+  {c:27,th:33,pr:19,tot:52,gr:'D1',rt:false},
+  {c:28,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:29,th:30,pr:28,tot:58,gr:'D1',rt:false},
+  {c:841,th:26,pr:48,tot:74,gr:'D2',rt:false},
+  {c:48,th:null,pr:null,tot:null,gr:'AB',rt:false,add:true,ab:true},
+]},
+{roll:'25640611',name:'Roshan Khatri',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:48,pr:18,tot:66,gr:'D1',rt:false},
+  {c:27,th:52,pr:19,tot:71,gr:'B1',rt:false},
+  {c:28,th:34,pr:18,tot:52,gr:'C2',rt:false},
+  {c:29,th:29,pr:28,tot:57,gr:'D1',rt:false},
+  {c:48,th:37,pr:29,tot:66,gr:'D1',rt:false},
+  {c:841,th:38,pr:48,tot:86,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640605',name:'Manmohan Singh Bafila',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:34,pr:18,tot:52,gr:'D2',rt:false},
+  {c:27,th:37,pr:18,tot:55,gr:'C2',rt:false},
+  {c:29,th:25,pr:28,tot:53,gr:'D1',rt:false},
+  {c:48,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:841,th:21,pr:47,tot:68,gr:'D2',rt:false},
+  {c:28,th:9,pr:18,tot:27,gr:'E',rt:true,add:true},
+]},
+{roll:'25640612',name:'Rudra Tiwari',stream:'Humanities',result:'PASS',subs:[
+  {c:301,th:55,pr:20,tot:75,gr:'C1',rt:false},
+  {c:27,th:38,pr:19,tot:57,gr:'C2',rt:false},
+  {c:28,th:26,pr:19,tot:45,gr:'D2',rt:false},
+  {c:29,th:45,pr:29,tot:74,gr:'B2',rt:false},
+  {c:48,th:33,pr:29,tot:62,gr:'D1',rt:false},
+  {c:841,th:39,pr:49,tot:88,gr:'C1',rt:false,add:true},
+]},
+{roll:'25640593',name:'Aditya Rawat',stream:'Humanities',result:'ESSENTIAL REPEAT',subs:[
+  {c:301,th:46,pr:20,tot:66,gr:'D1',rt:false},
+  {c:302,th:37,pr:20,tot:57,gr:'D2',rt:false},
+  {c:27,th:35,pr:null,tot:35,gr:'E',rt:false,rp:true},
+  {c:28,th:31,pr:19,tot:50,gr:'D1',rt:false},
+  {c:29,th:24,pr:null,tot:24,gr:'E',rt:false,rp:true},
+  {c:48,th:null,pr:null,tot:null,gr:'AB',rt:false,add:true,ab:true},
+]},
+{roll:'25640599',name:'Harshit Joshi',stream:'Humanities',result:'COMP',nickname:'Lambu',subs:[
+  {c:301,th:27,pr:19,tot:46,gr:'D2',rt:false},
+  {c:27,th:26,pr:18,tot:44,gr:'D2',rt:false},
+  {c:29,th:11,pr:28,tot:39,gr:'E',rt:true},
+  {c:48,th:23,pr:27,tot:50,gr:'D2',rt:false},
+  {c:841,th:17,pr:47,tot:64,gr:'D2',rt:false},
+  {c:28,th:6,pr:18,tot:24,gr:'E',rt:true,add:true},
+]},
+];
+
+// ============================================================
+// LOGIC FUNCTIONS
+// ============================================================
+
+function getCoreSubjectCodes(stream) {
+  return CORE_MAP[stream] || [];
+}
+
+function calcPct(student) {
+  const cores = getCoreSubjectCodes(student.stream);
+  const mainSubs = student.subs.filter(s => !s.add && !INTERNAL.includes(s.c));
+  const engSub = mainSubs.find(s => s.c === ENGLISH_CODE);
+  const coreSubs = mainSubs.filter(s => cores.includes(s.c));
+  const optSubs = mainSubs.filter(s => !cores.includes(s.c) && s.c !== ENGLISH_CODE && !INTERNAL.includes(s.c));
+  // Add additional subject as optional if not core/english
+  const addSub = student.subs.find(s => s.add && !s.ab);
+  if(addSub && !cores.includes(addSub.c) && addSub.c !== ENGLISH_CODE) {
+    optSubs.push(addSub);
+  }
+  const bestOpt = optSubs.filter(s=>s.tot!=null).sort((a,b)=>b.tot-a.tot)[0];
+  const counted = [...coreSubs, engSub, bestOpt].filter(Boolean).filter(s=>s.tot!=null);
+  if(!counted.length) return 0;
+  const totalMarks = counted.reduce((sum,s)=>sum+s.tot,0);
+  const maxMarks = counted.length * 100;
+  return (totalMarks/maxMarks*100).toFixed(1);
+}
+
+function getBestOpt(student) {
+  const cores = getCoreSubjectCodes(student.stream);
+  const mainSubs = student.subs.filter(s => !s.add && !INTERNAL.includes(s.c));
+  const optSubs = mainSubs.filter(s => !cores.includes(s.c) && s.c !== ENGLISH_CODE);
+  const addSub = student.subs.find(s => s.add && !s.ab);
+  if(addSub && !cores.includes(addSub.c) && addSub.c !== ENGLISH_CODE) optSubs.push(addSub);
+  return optSubs.filter(s=>s.tot!=null).sort((a,b)=>b.tot-a.tot)[0];
+}
+
+function getGraceSubjects(student) {
+  // Returns list of subjects where theory marks == passing threshold (grace/bare min)
+  return student.subs.filter(s => {
+    if(s.ab || s.rt || INTERNAL.includes(s.c)) return false;
+    const pass = PASS_THEORY[s.c];
+    if(pass == null || s.th == null) return false;
+    return s.th === pass;
+  });
+}
+
+function pctClass(p) {
+  const n = parseFloat(p);
+  if(n >= 80) return 'pct-high';
+  if(n >= 60) return 'pct-mid';
+  if(n >= 40) return 'pct-low';
+  return 'pct-fail';
+}
+
+function rbClass(r) {
+  if(r === 'PASS') return 'rb-pass';
+  if(r === 'COMP') return 'rb-comp';
+  return 'rb-er';
+}
+
+function pctCalcDesc(student) {
+  const cores = getCoreSubjectCodes(student.stream);
+  const coreNames = cores.map(c=>SUB_NAMES[c]||c).join(' + ');
+  const bo = getBestOpt(student);
+  const boName = bo ? (SUB_NAMES[bo.c]||bo.c) : 'N/A';
+  return `% = (English + ${coreNames} + best optional [${boName}]) ÷ 500`;
+}
+
+function buildSubCell(s, bestOpt, coreCodes) {
+  if(INTERNAL.includes(s.c)) return '';
+  const name = SUB_NAMES[s.c] || ('Sub '+s.c);
+  const isCore = coreCodes.includes(s.c);
+  const isEng = s.c === ENGLISH_CODE;
+  const isBestOpt = bestOpt && s.c === bestOpt.c && !isCore && !isEng;
+  let classes = 'sub-cell';
+  if(s.rt) classes += ' rt-flag';
+  else if(getIsGrace(s)) classes += ' grace-flag';
+  if(!isCore && !isEng) classes += ' optional-sub';
+  if(isBestOpt) classes += ' best-opt';
+
+  let scoreHtml;
+  if(s.ab) {
+    scoreHtml = `<div class="sub-scores"><span style="color:var(--text3)">ABSENT</span></div>`;
+  } else {
+    const rtTag = s.rt ? `<span class="rt-tag">RT</span>` : '';
+    const rpTag = s.rp ? `<span class="rt-tag">RP</span>` : '';
+    const thStr = s.th != null ? s.th : 'AB';
+    const prStr = s.pr != null ? s.pr : 'AB';
+    scoreHtml = `<div class="sub-scores"><span class="th">${thStr}</span><span class="sep">+</span><span class="pr">${prStr}</span><span class="sep">=</span><span class="tot">${s.tot != null ? s.tot : 'AB'}</span>${rtTag}${rpTag}</div>`;
+  }
+
+  const addLabel = s.add ? '<span style="font-size:9px;color:var(--text3);margin-left:4px">(add.)</span>' : '';
+  const bestLabel = isBestOpt ? '<span style="font-size:9px;color:var(--accent);margin-left:4px">★best</span>' : '';
+
+  return `<div class="${classes}">
+    <div class="sub-name">${name}${addLabel}${bestLabel}</div>
+    ${scoreHtml}
+    <div class="sub-grade">${s.gr||''}</div>
+  </div>`;
+}
+
+function getIsGrace(s) {
+  if(s.ab || s.rt || INTERNAL.includes(s.c)) return false;
+  const pass = PASS_THEORY[s.c];
+  if(pass == null || s.th == null) return false;
+  return s.th === pass;
+}
+
+// ============================================================
+// WITTY REMARKS ENGINE
+// ============================================================
+function getRemark(student) {
+  const pct = parseFloat(calcPct(student));
+  const graceSubs = getGraceSubjects(student);
+  const rtSubs = student.subs.filter(s=>s.rt);
+  const hasComp = student.result === 'COMP';
+  const hasER = student.result === 'ESSENTIAL REPEAT';
+  const hasAB = student.subs.some(s=>s.ab);
+  const allSubs = student.subs.filter(s=>!INTERNAL.includes(s.c)&&!s.add&&!s.ab);
+  const maxSubject = allSubs.filter(s=>s.tot!=null).sort((a,b)=>b.tot-a.tot)[0];
+  const minSubject = allSubs.filter(s=>s.tot!=null&&!s.rt).sort((a,b)=>a.tot-b.tot)[0];
+  const got100 = student.subs.some(s=>s.tot===100);
+  const allA1 = allSubs.every(s=>s.gr==='A1');
+  const engSub = student.subs.find(s=>s.c===301);
+  const englishStrong = engSub && engSub.tot >= 85;
+  const englishWeak = engSub && engSub.tot < 50;
+
+  // Special cases first
+  if(hasER) return "Unfortunate education. The calendar has been rescheduled.";
+  if(hasAB && hasComp) return "Absent in practicals, compartment in theory. A masterclass in not showing up.";
+  if(got100) {
+    const sub100 = student.subs.find(s=>s.tot===100);
+    return `100 in ${SUB_NAMES[sub100.c]||'a subject'}. We get it. You studied. Congratulations on your social life's sacrifice.`;
+  }
+  if(allA1) return "All A1 grades. Either studied properly or found a very efficient way to study. Either way — noted.";
+  if(pct >= 85) return "Top-tier distribution. Statistically, this person was not spending 6 hours on Instagram.";
+  if(pct >= 75) return "Solid performance. No disasters, no miracles. Reliable output, like a government employee but faster.";
+  if(pct >= 65) return "Decent numbers. Could've been better, could've been much worse. Somewhere in the comfortable middle, which is fine until it isn't.";
+  if(pct >= 55) return "Average performance with selective excellence. Some subjects clearly received preferential treatment.";
+  if(pct >= 45) {
+    if(graceSubs.length >= 2) return "Passing in multiple subjects by the skin of theory marks. CBSE's generosity has been noted and will not be forgotten.";
+    return "Below average, above disaster. A very specific zone to occupy. The subjects have been informed.";
+  }
+  if(hasComp) {
+    if(rtSubs.length >= 2) return `RT in ${rtSubs.length} subjects. The board has questions. So does everyone else.`;
+    return `Compartment. One subject didn't cooperate. Unfortunate, but recoverable.`;
+  }
+  if(pct < 45 && graceSubs.length > 0) return "Grace marks carrying significant weight here. The practical marks are doing emotional support.";
+
+  // Subject-specific observations
+  if(englishStrong && pct < 60) return `Strong in English, weaker everywhere else. Expressive but apparently selectively.`;
+  if(englishWeak) return "English below 50. Either brave or optimistic. Possibly both.";
+  if(maxSubject && minSubject && (maxSubject.tot - minSubject.tot) > 40) {
+    return `${maxSubject.tot} in one subject, ${minSubject.tot} in another. Selective dedication is still dedication.`;
+  }
+  if(graceSubs.length === 1) return `Grace mark in ${SUB_NAMES[graceSubs[0].c]||'one subject'}. Theory and the student had a disagreement. Practical stepped in as mediator.`;
+
+  // Stream-specific fallbacks
+  const fallbacks = {
+    PCM: ["PCM student. Either thriving or questioning every life decision. No in-between.", "Physics, Chemistry, Maths — the holy trinity of academic suffering. Result logged."],
+    PCB: ["PCB student. Future doctor or very informed person at dinner parties.", "Biology, Physics, Chemistry — and the marks to match the ambition, more or less."],
+    Commerce: ["Commerce student. Numbers were involved. Some of them cooperated.", "The market gave back mixed returns this quarter. Portfolio under review."],
+    Humanities: ["Humanities. The data exists. The feelings about it are complicated.", "History was made. Just not in History."]
+  };
+  const opts = fallbacks[student.stream] || ["Result processed. No further comments at this time."];
+  return opts[Math.floor(Math.random()*opts.length)];
+}
+
+function buildCard(student, expandByDefault=true) {
+  const pct = calcPct(student);
+  const cores = getCoreSubjectCodes(student.stream);
+  const bo = getBestOpt(student);
+  const allSubs = student.subs.filter(s=>!INTERNAL.includes(s.c));
+  const subsHtml = allSubs.map(s=>buildSubCell(s,bo,cores)).join('');
+  const nickname = student.nickname ? ` <span style="font-size:11px;color:var(--text3);font-weight:400">(${student.nickname})</span>` : '';
+  const resultLabel = student.result === 'ESSENTIAL REPEAT' ? 'ESS. REPEAT' : student.result;
+  const remark = getRemark(student);
+
+  return `<div class="result-card">
+    <div class="card-header">
+      <div class="card-left">
+        <div class="stream-dot dot-${student.stream}"></div>
+        <div>
+          <div class="card-name">${student.name}${nickname}</div>
+          <div class="card-meta">Roll: ${student.roll} · <span class="stream-tag st-${student.stream}">${student.stream}</span></div>
+        </div>
+      </div>
+      <div class="card-right">
+        <span class="pct-badge ${pctClass(pct)}">${pct}%</span>
+        <span class="result-badge ${rbClass(student.result)}">${resultLabel}</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="subjects-grid">${subsHtml}</div>
+      <div class="pct-line">${pctCalcDesc(student)} = <span>${pct}%</span></div>
+      <div style="margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:4px;border-left:2px solid var(--accent);font-size:12px;color:var(--text2);font-style:italic;line-height:1.6;">💬 ${remark}</div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// DISAMBIGUATION
+// ============================================================
+const DUPES = {};
+students.forEach(s => {
+  const k = s.name.toLowerCase();
+  if(!DUPES[k]) DUPES[k] = [];
+  DUPES[k].push(s);
+});
+
+function handleSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const area = document.getElementById('search-results');
+  if(!q) { area.innerHTML=''; return; }
+
+  const matches = students.filter(s => s.name.toLowerCase().includes(q));
+  if(!matches.length) {
+    area.innerHTML = `<div class="empty-state"><div>🔍</div><p>No student found. Check the name spelling.</p></div>`;
+    return;
+  }
+
+  // Check for exact name dupes
+  const exactName = matches.filter(s=>s.name.toLowerCase()===q);
+  if(exactName.length > 1) {
+    // Show disambiguation
+    const btns = exactName.map(s=>`<button class="disambig-btn" onclick="showSingle('${s.roll}')">${s.nickname||s.stream} (Roll ${s.roll})</button>`).join('');
+    area.innerHTML = `<div class="disambig"><p>Multiple students named <strong>${exactName[0].name}</strong> found. Which one?</p><div class="disambig-btns">${btns}</div></div>`;
+    return;
+  }
+
+  area.innerHTML = matches.map(s=>buildCard(s)).join('');
+}
+
+function showSingle(roll) {
+  const s = students.find(x=>x.roll===roll);
+  document.getElementById('search-results').innerHTML = buildCard(s);
+}
+
+// ============================================================
+// ALL STUDENTS
+// ============================================================
+function renderAll() {
+  const streams = ['PCM','PCB','Commerce','Humanities'];
+  let html = '';
+  streams.forEach(stream => {
+    const list = students.filter(s=>s.stream===stream).sort((a,b)=>a.name.localeCompare(b.name));
+    html += `<div class="all-stream-section">
+      <div class="all-stream-title ast-${stream}">${stream}</div>`;
+    list.forEach(s => {
+      const pct = calcPct(s);
+      const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS.REP':s.result;
+      html += `<div class="all-row" onclick="jumpToSearch('${s.name}','${s.roll}')">
+        <div class="stream-dot dot-${stream}"></div>
+        <div class="all-name">${s.name}${s.nickname?` <span style="font-size:10px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
+        <div class="all-pct ${pctClass(pct)}">${pct}%</div>
+        <div class="all-result ${rbClass(s.result)}">${resultLabel}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('all-content').innerHTML = html;
+}
+
+function jumpToSearch(name, roll) {
+  switchTabById('search');
+  document.getElementById('search-input').value = name;
+  const matches = students.filter(s=>s.name.toLowerCase()===name.toLowerCase());
+  if(matches.length>1) {
+    const btns = matches.map(s=>`<button class="disambig-btn" onclick="showSingle('${s.roll}')">${s.nickname||s.stream} (Roll ${s.roll})</button>`).join('');
+    document.getElementById('search-results').innerHTML = `<div class="disambig"><p>Multiple students named <strong>${name}</strong> found. Which one?</p><div class="disambig-btns">${btns}</div></div>`;
+  } else {
+    showSingle(roll);
+  }
+}
+
+// ============================================================
+// TOP PERFORMERS
+// ============================================================
+function renderTop() {
+  const sorted = [...students].filter(s=>s.result==='PASS').sort((a,b)=>parseFloat(calcPct(b))-parseFloat(calcPct(a)));
+  const top10 = sorted.slice(0,10);
+  const medals = ['🥇','🥈','🥉'];
+  let html = '';
+  top10.forEach((s,i) => {
+    const pct = calcPct(s);
+    const medal = i<3 ? medals[i] : `#${i+1}`;
+    const cls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    html += `<div class="rank-card" onclick="jumpToSearch('${s.name}','${s.roll}')">
+      <div class="rank-num ${cls}">${medal}</div>
+      <div class="rank-info">
+        <div class="rank-name">${s.name}${s.nickname?` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
+        <div class="rank-sub">${s.stream} · Roll ${s.roll}</div>
+      </div>
+      <div class="rank-pct ${pctClass(pct)}">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('top-content').innerHTML = html;
+}
+
+// ============================================================
+// BOTTOM 10
+// ============================================================
+function renderBottom() {
+  const sorted = [...students].sort((a,b)=>parseFloat(calcPct(a))-parseFloat(calcPct(b)));
+  const bot10 = sorted.slice(0,10);
+  const shameEmojis = ['💀','☠️','🪦','😵','🤡','🫠','👻','😬','🙈','😶'];
+  let html = `<div class="bot-header">
+    <h2>Bottom 10 — Class of 2026</h2>
+    <p>The complete class, ranked. These are the ones holding the floor down.</p>
+  </div>`;
+  bot10.forEach((s,i) => {
+    const pct = calcPct(s);
+    const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
+    html += `<div class="rank-card" onclick="jumpToSearch('${s.name}','${s.roll}')">
+      <div class="rank-num rank-shame">${shameEmojis[i]}</div>
+      <div class="rank-info">
+        <div class="rank-name">${s.name}${s.nickname?` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
+        <div class="rank-sub">${s.stream} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
+      </div>
+      <div class="rank-pct pct-fail">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('bottom-content').innerHTML = html;
+}
+
+// ============================================================
+// GRACE / DHAKKA GANG
+// ============================================================
+function renderGrace() {
+  const graceStudents = students.map(s => {
+    const graceSubs = getGraceSubjects(s);
+    return { student: s, graceSubs };
+  }).filter(x => x.graceSubs.length > 0).sort((a,b)=>b.graceSubs.length-a.graceSubs.length);
+
+  const roasts = [
+    "Theory mein itna scored — practical ne mercy dikhaayi, tujhe nahi.",
+    "23 leke pass? Bhai luck bhi thak gaya hoga.",
+    "Marks itne kam hain ki CBSE ko khud doubt hua pass karna chahiye ya nahi.",
+    "Theory paper dekh ke pencil ko bhi sharam aa gayi.",
+    "Ye score dekh ke examiner ne bhi ek baar aankhein band ki.",
+    "Grace marks hain ya divine intervention? CBSE ko bhi nahi pata.",
+    "Passing marks se sirf ek aage — ek aur galat answer aur history hoti.",
+    "Even a coin toss would've done better.",
+    "Bhai ye marks hain ya PIN code?",
+    "Pass hua, par kaise — ye toh CBSE ko bhi nahi pata.",
+    "Theory marks itne low hain ki practical ne CPR kiya.",
+    "Bhai tera result ek motivational poster ka villain ban sakta hai.",
+    "Marks itne edge pe hain — ek sneeze aur compartment hoti.",
+  ];
+
+  let html = `<div class="roast-header">
+    <h2>🃏 Dhakka Marke Pass Gang</h2>
+    <p>These legends scored the bare minimum in theory. CBSE mercy pass — certified.</p>
+  </div>`;
+
+  graceStudents.forEach((x,i) => {
+    const s = x.student;
+    const roast = roasts[i % roasts.length];
+    const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
+    html += `<div class="grace-card">
+      <div class="grace-card-header">
+        <div>
+          <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll}</div>
+        </div>
+        <div class="grace-count">${x.graceSubs.length} subject${x.graceSubs.length>1?'s':''} 🃏</div>
+      </div>
+      <div class="grace-subjects">${subTags}</div>
+      <div class="roast-line"><span class="skull">💬</span>${roast}</div>
+    </div>`;
+  });
+
+  document.getElementById('grace-content').innerHTML = html;
+}
+
+// ============================================================
+// MULTI GRACE — HALL OF SHAME
+// ============================================================
+function renderMultiGrace() {
+  const multiRoasts = [
+    "Bhai multiple subjects mein bottom scraping — ye consistency bhi toh talent hai.",
+    "2+ subjects mein grace — at this point CBSE is carrying you on their back.",
+    "Alag alag subjects, same energy — barely alive in all of them.",
+    "Diverse grace marks portfolio. Broadly underperforming. Truly well-rounded.",
+    "Bhai itne subjects mein barely passed — even your marksheet looks embarrassed.",
+    "Multiple grace marks — not a skill issue, it's an art form at this point.",
+    "Collected grace marks in multiple subjects like they were Pokémon cards.",
+    "Subject ke baad subject — barely surviving each one. Respect, in a horrified way.",
+  ];
+
+  const shameStudents = students.map(s => {
+    const graceSubs = getGraceSubjects(s);
+    return { student: s, graceSubs };
+  }).filter(x => x.graceSubs.length >= 2).sort((a,b)=>b.graceSubs.length-a.graceSubs.length);
+
+  let html = `<div class="multi-grace-header">
+    <span class="joker-emoji">🤡</span>
+    <h2>Hall of Shame</h2>
+    <p>Grace marks in 2+ subjects. These individuals are in a different category entirely.</p>
+  </div>`;
+
+  if(!shameStudents.length) {
+    html += `<div class="empty-state"><div>🎉</div><p>Nobody qualified for the Hall of Shame. Disappointing.</p></div>`;
+  } else {
+    shameStudents.forEach((x,i) => {
+      const s = x.student;
+      const roast = multiRoasts[i % multiRoasts.length];
+      const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
+      const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
+      html += `<div class="grace-card" style="border-color:rgba(255,68,68,0.35)">
+        <div class="grace-card-header">
+          <div>
+            <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
+          </div>
+          <div class="grace-count">${x.graceSubs.length} subjects 🤡</div>
+        </div>
+        <div class="grace-subjects">${subTags}</div>
+        <div class="roast-line"><span class="skull">☠️</span>${roast}</div>
+      </div>`;
+    });
+  }
+
+  document.getElementById('multigrace-content').innerHTML = html;
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='all') renderAll();
+  if(name==='top') renderTop();
+  if(name==='bottom') renderBottom();
+  if(name==='grace') renderGrace();
+  if(name==='multigrace') renderMultiGrace();
+  if(name==='stats') renderStats();
+  if(name==='about') renderAbout();
+}
+
+function switchTabById(name) {
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(t=>t.classList.remove('active'));
+  panels.forEach(p=>p.classList.remove('active'));
+  const tabMap = {search:0,all:1,top:2,bottom:3,grace:4,multigrace:5,stats:6,about:7};
+  tabs[tabMap[name]].classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='stats') renderStats();
+  if(name==='about') renderAbout();
+}
+
+// ============================================================
+// LOGIN GATE
+// ============================================================
+// Admit card map: roll -> admit card id (lowercase for comparison)
+const ADMIT_MAP = {};
+students.forEach(s => { ADMIT_MAP[s.roll] = s.roll.slice(-4); }); // last 4 digits as a simple gate
+
+// Real admit card structure: [dad surname 2nd last letter][mom surname last letter][last 2 digits roll][4 digit school code]
+// For gate purposes we use a simplified check: just roll + any non-empty admit card that starts with 2 letters and has 6 digits
+// This lets any student with valid roll + their real admit card id through
+function validateAdmitCard(roll, admit) {
+  admit = admit.trim().toUpperCase();
+  if(!ADMIT_MAP[roll]) return false;
+  // Accept if: length 8, first 2 chars letters, next 6 digits, last 4 match school code
+  if(admit.length !== 8) return false;
+  if(!/^[A-Z]{2}\d{6}$/.test(admit)) return false;
+  // Last 4 digits must match school pattern (same for all DAV Haldwani students: 4534)
+  // We'll store this as the known suffix
+  const knownSuffix = '8141'; // DAV Haldwani school batch code
+  return admit.slice(4) === knownSuffix;
+}
+
+let loginAttempts = 0;
+const MAX_ATTEMPTS = 3;
+
+function attemptLogin() {
+  if(loginAttempts >= MAX_ATTEMPTS) return;
+  const roll = document.getElementById('login-roll').value.trim();
+  const admit = document.getElementById('login-admit').value.trim();
+  const errEl = document.getElementById('login-error');
+
+  if(!roll || !admit) {
+    errEl.textContent = 'Both fields are required.';
+    return;
+  }
+
+  const valid = validateAdmitCard(roll, admit) && ADMIT_MAP[roll];
+
+  if(valid) {
+    // Mark as verified in localStorage
+    try { localStorage.setItem('rf26_verified', '1'); } catch(e){}
+    document.getElementById('login-gate').style.display = 'none';
+    showIntroSlides();
+  } else {
+    loginAttempts++;
+    const remaining = MAX_ATTEMPTS - loginAttempts;
+    if(remaining <= 0) {
+      errEl.textContent = 'Access locked. Too many failed attempts.';
+      document.querySelector('#login-gate button').disabled = true;
+      document.querySelector('#login-gate button').style.opacity = '0.4';
+      document.getElementById('login-roll').disabled = true;
+      document.getElementById('login-admit').disabled = true;
+    } else {
+      errEl.textContent = `Invalid credentials. ${remaining} attempt${remaining>1?'s':''} remaining.`;
+    }
+  }
+}
+
+// Allow pressing Enter to submit
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && document.getElementById('login-gate').style.display !== 'none') {
+    attemptLogin();
+  }
+});
+
+// Check if already verified this session
+function checkExistingSession() {
+  try {
+    if(localStorage.getItem('rf26_verified') === '1') {
+      document.getElementById('login-gate').style.display = 'none';
+      showIntroSlides();
+      return true;
+    }
+  } catch(e){}
+  return false;
+}
+
+// ============================================================
+// INTRO SLIDES
+// ============================================================
+const introSlides = [
+  {
+    title: "Voluntary Entry",
+    text: "You are entering this website entirely at your own discretion. Any emotional turbulence, reality checks, academic shocks, or ego collapse experienced beyond this point shall be considered self-inflicted."
+  },
+  {
+    title: "Why This Exists",
+    text: "This project was created for transparency, curiosity, and a little chaos. A surprising number of people ask everyone else's marks while guarding their own like state secrets. This dashboard simply accelerates the process."
+  },
+  {
+    title: "Percentage Logic",
+    text: "Percentages here are calculated using core stream subjects + English + best optional subject. Creative mathematical gymnastics used elsewhere to inflate percentages have not been considered."
+  },
+  {
+    title: "Coverage Notice",
+    text: "Not every student has been fully accounted for due to incomplete data availability. Humanities entries are also partially limited. The internet historically tends to spend less time debating humanities toppers anyway."
+  },
+  {
+    title: "AI Disclaimer",
+    text: "Most commentary, observations, labels, and dramatic one-liners on this website were generated with AI assistance, alongside a few intentionally questionable human decisions. None of it should be treated as personal hatred. The website is sarcastic. Life moves on."
+  }
+];
+
+let currentSlide = 0;
+
+function showIntroSlides() {
+  // Check if slides already seen this session
+  try {
+    if(localStorage.getItem('rf26_slides_done') === '1') {
+      showDashboard();
+      return;
+    }
+  } catch(e){}
+  currentSlide = 0;
+  const overlay = document.getElementById('intro-overlay');
+  overlay.style.display = 'flex';
+  renderIntroSlide();
+}
+
+function renderIntroSlide() {
+  const slide = introSlides[currentSlide];
+  const total = introSlides.length;
+  document.getElementById('intro-step').textContent = `Step ${currentSlide+1} of ${total}`;
+  document.getElementById('intro-bar').style.width = `${((currentSlide+1)/total)*100}%`;
+  document.getElementById('intro-slides-wrap').innerHTML = `
+    <div class="consent-title">${slide.title}</div>
+    <div class="consent-text">${slide.text}</div>
+  `;
+  document.getElementById('intro-prev').style.display = currentSlide > 0 ? 'block' : 'none';
+  const nextBtn = document.getElementById('intro-next');
+  if(currentSlide === total - 1) {
+    nextBtn.textContent = 'Enter Dashboard →';
+  } else {
+    nextBtn.textContent = 'Understood →';
+  }
+}
+
+function introNav(dir) {
+  const total = introSlides.length;
+  if(dir === 1 && currentSlide === total - 1) {
+    try { localStorage.setItem('rf26_slides_done', '1'); } catch(e){}
+    document.getElementById('intro-overlay').style.display = 'none';
+    showDashboard();
+    return;
+  }
+  currentSlide = Math.max(0, Math.min(total-1, currentSlide + dir));
+  renderIntroSlide();
+}
+
+function showDashboard() {
+  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('main-content').style.display = 'block';
+}
+
+// ============================================================
+// SEARCH TRACKING (localStorage)
+// ============================================================
+function trackSearch(name) {
+  try {
+    const raw = localStorage.getItem('rf26_searches') || '{}';
+    const data = JSON.parse(raw);
+    data[name] = (data[name] || 0) + 1;
+    localStorage.setItem('rf26_searches', JSON.stringify(data));
+  } catch(e){}
+}
+
+function getSearchStats() {
+  try {
+    const raw = localStorage.getItem('rf26_searches') || '{}';
+    return JSON.parse(raw);
+  } catch(e){ return {}; }
+}
+
+// ============================================================
+// UPDATED SEARCH WITH TRACKING
+// ============================================================
+// Override handleSearch to add tracking
+const _origHandleSearch = handleSearch;
+function handleSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const area = document.getElementById('search-results');
+  if(!q || q.length < 3) { area.innerHTML=''; return; }
+
+  const matches = students.filter(s => s.name.toLowerCase().includes(q));
+  if(!matches.length) {
+    area.innerHTML = `<div class="empty-state"><div>🔍</div><p>No student found. Check the spelling.</p></div>`;
+    return;
+  }
+
+  const exactName = matches.filter(s=>s.name.toLowerCase()===q);
+  if(exactName.length > 1) {
+    const btns = exactName.map(s=>`<button class="disambig-btn" onclick="showSingle('${s.roll}')">${s.nickname||s.stream} (Roll ${s.roll})</button>`).join('');
+    area.innerHTML = `<div class="disambig"><p>Multiple students named <strong>${exactName[0].name}</strong> found. Which one?</p><div class="disambig-btns">${btns}</div></div>`;
+    return;
+  }
+
+  // Track the search
+  if(matches.length === 1) trackSearch(matches[0].name);
+
+  area.innerHTML = matches.map(s=>buildCard(s)).join('');
+}
+
+// ============================================================
+// STATISTICS TAB
+// ============================================================
+function renderStats() {
+  const streams = ['PCM','PCB','Commerce','Humanities'];
+  const streamColors = {PCM:'var(--pcm)',PCB:'var(--pcb)',Commerce:'var(--com)',Humanities:'var(--hum)'};
+
+  function streamStudents(s) { return students.filter(x=>x.stream===s); }
+  function avgPct(list) {
+    if(!list.length) return 0;
+    return (list.reduce((sum,s)=>sum+parseFloat(calcPct(s)),0)/list.length).toFixed(1);
+  }
+
+  const total = students.length;
+  const passCount = students.filter(s=>s.result==='PASS').length;
+  const compCount = students.filter(s=>s.result==='COMP').length;
+  const erCount = students.filter(s=>s.result==='ESSENTIAL REPEAT').length;
+  const batchAvg = avgPct(students);
+
+  const streamAvgs = streams.map(s=>({stream:s, avg:parseFloat(avgPct(streamStudents(s))), count:streamStudents(s).length}));
+  const highStream = [...streamAvgs].sort((a,b)=>b.avg-a.avg)[0];
+  const lowStream = [...streamAvgs].sort((a,b)=>a.avg-b.avg)[0];
+
+  // Search stats
+  const searchData = getSearchStats();
+  const topSearches = Object.entries(searchData).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  let html = `
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Total Students</div>
+      <div style="font-size:28px;font-weight:800;color:var(--accent);">${total}</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Batch Average</div>
+      <div style="font-size:28px;font-weight:800;color:var(--accent);">${batchAvg}%</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(68,255,136,0.2);border-radius:6px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Pass</div>
+      <div style="font-size:28px;font-weight:800;color:var(--green);">${passCount}</div>
+      <div style="font-size:11px;color:var(--text3);">${((passCount/total)*100).toFixed(0)}%</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(255,136,68,0.2);border-radius:6px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Compartment</div>
+      <div style="font-size:28px;font-weight:800;color:var(--orange);">${compCount}</div>
+      <div style="font-size:11px;color:var(--text3);">${((compCount/total)*100).toFixed(0)}%</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(255,68,68,0.2);border-radius:6px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Essential Repeat</div>
+      <div style="font-size:28px;font-weight:800;color:var(--red);">${erCount}</div>
+      <div style="font-size:11px;color:var(--text3);">${((erCount/total)*100).toFixed(0)}%</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Stream Breakdown</div>
+  ${streamAvgs.map(({stream,avg,count})=>{
+    const barW = Math.min(100, (avg/100)*100);
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="stream-tag st-${stream}">${stream}</span>
+          <span style="font-size:12px;color:var(--text3);font-family:'Space Mono',monospace;">${count} students</span>
+        </div>
+        <span style="font-family:'Space Mono',monospace;font-weight:700;color:${streamColors[stream]};">${avg}%</span>
+      </div>
+      <div style="height:4px;background:var(--border);border-radius:2px;">
+        <div style="height:100%;width:${barW}%;background:${streamColors[stream]};border-radius:2px;transition:width 0.6s ease;"></div>
+      </div>
+    </div>`;
+  }).join('')}
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem;margin-bottom:1.5rem;">
+    <div style="background:var(--surface);border:1px solid rgba(68,255,136,0.15);border-radius:6px;padding:12px;">
+      <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Highest Avg Stream</div>
+      <div style="font-size:14px;font-weight:700;color:var(--green);">${highStream.stream} · ${highStream.avg}%</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(255,68,68,0.15);border-radius:6px;padding:12px;">
+      <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Lowest Avg Stream</div>
+      <div style="font-size:14px;font-weight:700;color:var(--red);">${lowStream.stream} · ${lowStream.avg}%</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Most Searched — This Device</div>
+  ${topSearches.length ? topSearches.map(([name,count],i)=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
+      <span style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text3);min-width:20px;">#${i+1}</span>
+      <span style="flex:1;font-size:13px;font-weight:600;">${name}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:12px;color:var(--text3);">${count} search${count>1?'es':''}</span>
+    </div>`).join('') : `<div style="font-size:13px;color:var(--text3);padding:1rem 0;">No searches recorded on this device yet.</div>`}
+  `;
+
+  document.getElementById('stats-content').innerHTML = html;
+}
+
+// ============================================================
+// ABOUT TAB
+// ============================================================
+function renderAbout() {
+  const faqs = [
+    {
+      q: "Who made this?",
+      a: "Someone from this batch with too much time, a decent understanding of how CBSE result systems work, and absolutely no chill. The identity remains classified. Good luck figuring it out — this is a public school, not the Pentagon."
+    },
+    {
+      q: "Is this legal?",
+      a: "CBSE result data is publicly accessible. You've been able to check anyone's result for years — this just removes the friction. No private data was hacked, breached, or leaked. This is a convenience layer over public information, not a surveillance operation."
+    },
+    {
+      q: "Why should I trust these marks?",
+      a: "Cross-check with the official CBSE result portal if you want. The data here was collected and verified manually. Accuracy is high. If something looks off for a specific student, assume a data entry edge case, not sabotage."
+    },
+    {
+      q: "How is the percentage calculated?",
+      a: "Core subjects (stream-specific) + English + best optional subject. Five subjects total. Out of 500 marks. This is the most academically honest method, and it is not subject to negotiation. Students replacing core subjects with easier optionals to boost percentage are not being entertained here."
+    },
+    {
+      q: "Someone got 100 in a subject. Thoughts?",
+      a: "Bookworm detected. Efficiency levels: high. The system acknowledges your existence. Whether it respects you is a separate discussion."
+    },
+    {
+      q: "What if someone failed?",
+      a: "Unfortunate education. The data reflects what it reflects. The website doesn't dwell on it and neither should you."
+    },
+    {
+      q: "You're corny asf",
+      a: `<a href="https://youtu.be/S9RVS8cjNN0?si=ZzykgUsF6ROu5PcL" target="_blank">Acknowledged.</a>`
+    },
+    {
+      q: "What was your inspiration to make this?",
+      a: `<a href="https://youtu.be/FknatnXUiBQ?si=_DmaWCGR1p1l2WZv" target="_blank">Click here.</a>`
+    },
+    {
+      q: "What's your favourite YouTube video?",
+      a: `<a href="https://youtu.be/Aq5WXmQQooo?si=2j_6xwT6yt9V866r" target="_blank">This one.</a>`
+    },
+    {
+      q: "Why are Humanities results limited?",
+      a: "Data availability constraints. Also, the humanities section historically does not generate the level of competitive anxiety that warrants full documentation. This is not a moral judgement. It's a statistical observation."
+    },
+    {
+      q: "Can I get removed from this?",
+      a: "This is public CBSE data. The dashboard doesn't create the data — it organises it. If you're uncomfortable seeing your publicly available result displayed in a cleaner format, that's a you problem, not a website problem."
+    },
+    {
+      q: "Are you coming back next year?",
+      a: "Depends entirely on whether the next batch deserves documentation. Current probability: nonzero."
+    }
+  ];
+
+  let html = `
+  <div class="about-hero">
+    <h2>ABOUT THIS PROJECT</h2>
+    <p>transparency · curiosity · minimal regret</p>
+  </div>
+  ${faqs.map((f,i)=>`
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(${i})">
+      <span>${f.q}</span>
+      <span class="arrow" id="arrow-${i}">▼</span>
+    </div>
+    <div class="faq-a" id="faq-a-${i}">${f.a}</div>
+  </div>`).join('')}
+  `;
+  document.getElementById('about-content').innerHTML = html;
+}
+
+function toggleFaq(i) {
+  const ans = document.getElementById(`faq-a-${i}`);
+  const arrow = document.getElementById(`arrow-${i}`);
+  const q = ans.previousElementSibling;
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open', !isOpen);
+  q.classList.toggle('open', !isOpen);
+}
+
+// ============================================================
+// UPDATED MULTIGRACE TONE
+// ============================================================
+function renderMultiGrace() {
+  const analyticalLines = [
+    "Multiple weak points detected across evaluation matrix.",
+    "Performance inconsistency observed across subjects. System had to apply multiple adjustments.",
+    "Broad-spectrum underperformance. Consistent, if nothing else.",
+    "Multiple grace adjustments recorded. CBSE worked overtime for this one.",
+    "Statistical deviation across subject clusters. Unlikely to be coincidence.",
+    "Performance distribution: thin across the board.",
+    "Passing threshold reached via multiple interventions. The system noted it.",
+    "Marks suggest unstable academic distribution across multiple units.",
+  ];
+
+  const shameStudents = students.map(s => {
+    const graceSubs = getGraceSubjects(s);
+    return { student: s, graceSubs };
+  }).filter(x => x.graceSubs.length >= 2).sort((a,b)=>b.graceSubs.length-a.graceSubs.length);
+
+  let html = `<div class="multi-grace-header">
+    <span class="joker-emoji">📊</span>
+    <h2>Multiple Deficit Analysis</h2>
+    <p>Students with grace marks in 2 or more subjects. Statistically notable.</p>
+  </div>`;
+
+  if(!shameStudents.length) {
+    html += `<div class="empty-state"><div>🎉</div><p>No students qualified for this category.</p></div>`;
+  } else {
+    shameStudents.forEach((x,i) => {
+      const s = x.student;
+      const line = analyticalLines[i % analyticalLines.length];
+      const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
+      const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
+      html += `<div class="grace-card" style="border-color:rgba(255,136,68,0.25)">
+        <div class="grace-card-header">
+          <div>
+            <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
+          </div>
+          <div class="grace-count">${x.graceSubs.length} subjects</div>
+        </div>
+        <div class="grace-subjects">${subTags}</div>
+        <div class="roast-line"><span class="skull">📉</span> ${line}</div>
+      </div>`;
+    });
+  }
+  document.getElementById('multigrace-content').innerHTML = html;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+checkExistingSession();
+</script>
+</body>
+</html>
