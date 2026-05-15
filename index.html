@@ -497,6 +497,22 @@ body {
 .consent-btn-accept { background: var(--accent); color: #0a0a0a; }
 .consent-btn-accept:hover { opacity: 0.88; }
 
+/* POLL */
+.poll-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.2rem; }
+.poll-question { font-size: 15px; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+.poll-options { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.poll-btn { padding: 0.5rem 1.1rem; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 700; font-family: 'Syne', sans-serif; transition: transform 0.1s, opacity 0.1s; }
+.poll-btn:hover { transform: scale(1.04); }
+.poll-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.poll-green { background: var(--green); color: #0a0a0a; }
+.poll-yellow { background: var(--accent); color: #0a0a0a; }
+.poll-results { margin-top: 1rem; font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; min-height: 1rem; line-height: 1.8; }
+.poll-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.poll-bar-bg { flex: 1; background: var(--surface2); border-radius: 3px; height: 6px; overflow: hidden; }
+.poll-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
+.poll-bar-label { font-size: 11px; color: var(--text2); min-width: 80px; }
+.poll-bar-pct { font-size: 11px; color: var(--text3); min-width: 34px; text-align: right; }
+
 /* ABOUT */
 .about-wrap { padding-bottom: 2rem; }
 .about-hero { background: linear-gradient(135deg, #0f0f0f, #111); border: 1px solid var(--border2); border-radius: 8px; padding: 2rem; margin-bottom: 1.5rem; text-align: center; }
@@ -525,7 +541,8 @@ body {
       <p style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px;">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1.5rem;">
-      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Verification Required</div>
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Verification Required</div>
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1rem;line-height:1.6;">This is for identity verification only. Your admit card ID is <span style="color:var(--accent)">not stored</span> anywhere — not on a server, not in a database. The creator already has everyone's IDs. This gate just ensures only batch students get in.</div>
       <div style="margin-bottom:12px;">
         <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Space Mono',monospace;">Roll Number</label>
         <input id="login-roll" type="text" placeholder="e.g. 25640515" style="width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:14px;padding:10px 12px;border-radius:4px;outline:none;" />
@@ -572,6 +589,7 @@ body {
     <button class="tab" onclick="switchTab('multigrace',this)">📊 Deficit Analysis</button>
     <button class="tab" onclick="switchTab('stats',this)">📈 Statistics</button>
     <button class="tab" onclick="switchTab('about',this)">❓ About</button>
+    <button class="tab" onclick="switchTab('poll',this)">🗳️ Poll</button>
   </div>
 </div>
 
@@ -619,6 +637,49 @@ body {
   <!-- ABOUT -->
   <div id="panel-about" class="panel">
     <div class="about-wrap" id="about-content"></div>
+  </div>
+
+  <!-- POLL -->
+  <div id="panel-poll" class="panel">
+    <div style="max-width:600px;margin:2rem auto;padding:1rem">
+      <h2 style="text-align:center;margin-bottom:0.4rem;font-family:'Syne',sans-serif;font-weight:800;letter-spacing:0.05em;">BATCH POLL</h2>
+      <p style="text-align:center;font-size:12px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:0.4rem;">anonymous · live · one vote per question</p>
+      <p style="text-align:center;font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2rem;opacity:0.6;">no accounts, no names, no ip logging — votes are untraceable numbers in a database</p>
+      <div class="poll-card" id="poll-1">
+        <p class="poll-question">Did you enjoy this site?</p>
+        <div class="poll-options">
+          <button class="poll-btn poll-green" onclick="vote('poll-1','fuh_nawh')">🔥 Fuh nawh</button>
+          <button class="poll-btn poll-yellow" onclick="vote('poll-1','fuh_nawh_yellow')">💀 Fuh nawh (but in yellow)</button>
+        </div>
+        <div class="poll-results" id="results-poll-1"></div>
+      </div>
+      <div class="poll-card" id="poll-2">
+        <p class="poll-question">Was your result what you expected?</p>
+        <div class="poll-options">
+          <button class="poll-btn poll-green" onclick="vote('poll-2','yes')">✅ Obviously</button>
+          <button class="poll-btn poll-yellow" onclick="vote('poll-2','no')">💀 Touched grass too late</button>
+        </div>
+        <div class="poll-results" id="results-poll-2"></div>
+      </div>
+      <div class="poll-card" id="poll-3">
+        <p class="poll-question">Will the batch group chat survive 2026?</p>
+        <div class="poll-options">
+          <button class="poll-btn poll-green" onclick="vote('poll-3','yes')">🕊️ Yes somehow</button>
+          <button class="poll-btn poll-yellow" onclick="vote('poll-3','no')">☠️ Already dead</button>
+        </div>
+        <div class="poll-results" id="results-poll-3"></div>
+      </div>
+      <div class="poll-card" id="poll-4">
+        <p class="poll-question">Rate the site</p>
+        <div class="poll-options">
+          <button class="poll-btn poll-green" onclick="vote('poll-4','fire1')">🔥 Mid</button>
+          <button class="poll-btn poll-green" onclick="vote('poll-4','fire2')">🔥🔥 Good</button>
+          <button class="poll-btn poll-yellow" onclick="vote('poll-4','fire3')">🔥🔥🔥 Peak</button>
+        </div>
+        <div class="poll-results" id="results-poll-4"></div>
+      </div>
+      <p style="text-align:center;opacity:0.3;font-size:11px;margin-top:2rem;font-family:'Space Mono',monospace;">votes are live. results update in real time.</p>
+    </div>
   </div>
 
 </div>
@@ -1843,6 +1904,7 @@ function switchTab(name, el) {
   if(name==='multigrace') renderMultiGrace();
   if(name==='stats') renderStats();
   if(name==='about') renderAbout();
+  if(name==='poll') initPolls();
 }
 
 function switchTabById(name) {
@@ -1850,11 +1912,12 @@ function switchTabById(name) {
   const panels = document.querySelectorAll('.panel');
   tabs.forEach(t=>t.classList.remove('active'));
   panels.forEach(p=>p.classList.remove('active'));
-  const tabMap = {search:0,all:1,top:2,bottom:3,grace:4,multigrace:5,stats:6,about:7};
+  const tabMap = {search:0,all:1,top:2,bottom:3,grace:4,multigrace:5,stats:6,about:7,poll:8};
   tabs[tabMap[name]].classList.add('active');
   document.getElementById('panel-'+name).classList.add('active');
   if(name==='stats') renderStats();
   if(name==='about') renderAbout();
+  if(name==='poll') initPolls();
 }
 
 // ============================================================
@@ -1898,6 +1961,7 @@ function attemptLogin() {
   if(valid) {
     // Mark as verified in localStorage
     try { localStorage.setItem('rf26_verified', '1'); } catch(e){}
+    incrementAccessCount();
     document.getElementById('login-gate').style.display = 'none';
     showIntroSlides();
   } else {
@@ -2167,40 +2231,48 @@ function renderAbout() {
       a: "CBSE result data is publicly accessible. You've been able to check anyone's result for years — this just removes the friction. No private data was hacked, breached, or leaked. This is a convenience layer over public information, not a surveillance operation."
     },
     {
+      q: "How did you figure out everyone's results?",
+      a: "Functional brain."
+    },
+    {
+      q: "You must be a senior dev or a coding expert to build this.",
+      a: "AI exists*"
+    },
+    {
       q: "Why should I trust these marks?",
-      a: "Cross-check with the official CBSE result portal if you want. The data here was collected and verified manually. Accuracy is high. If something looks off for a specific student, assume a data entry edge case, not sabotage."
+      a: "Cross-check with the official CBSE result portal if you want. The data here was collected and verified manually. Accuracy is high. If something looks off, assume a data entry edge case — not sabotage."
     },
     {
       q: "How is the percentage calculated?",
-      a: "Core subjects (stream-specific) + English + best optional subject. Five subjects total. Out of 500 marks. This is the most academically honest method, and it is not subject to negotiation. Students replacing core subjects with easier optionals to boost percentage are not being entertained here."
+      a: "Core subjects (stream-specific) + English + best optional. Five subjects, out of 500. Most academically honest method. Not subject to negotiation. Students gaming optionals to inflate their percentage are not being entertained here."
     },
     {
       q: "Someone got 100 in a subject. Thoughts?",
-      a: "Bookworm detected. Efficiency levels: high. The system acknowledges your existence. Whether it respects you is a separate discussion."
+      a: "Bookworm detected. The system acknowledges your existence. Whether it respects you is a separate discussion."
     },
     {
       q: "What if someone failed?",
-      a: "Unfortunate education. The data reflects what it reflects. The website doesn't dwell on it and neither should you."
+      a: "The data reflects what it reflects. The website doesn't dwell on it and neither should you."
     },
     {
       q: "You're corny asf",
-      a: `<a href="https://youtu.be/S9RVS8cjNN0?si=ZzykgUsF6ROu5PcL" target="_blank">Acknowledged.</a>`
+      a: `<a href="https://youtu.be/_caMQpiwiaU?t=5" target="_blank">It's corn.</a>`
     },
     {
-      q: "What was your inspiration to make this?",
-      a: `<a href="https://youtu.be/FknatnXUiBQ?si=_DmaWCGR1p1l2WZv" target="_blank">Click here.</a>`
+      q: "What was your reaction after deploying this at 1:45am?",
+      a: `<a href="https://youtu.be/r5_NvFTfAWc?t=5" target="_blank">This.</a>`
     },
     {
-      q: "What's your favourite YouTube video?",
-      a: `<a href="https://youtu.be/Aq5WXmQQooo?si=2j_6xwT6yt9V866r" target="_blank">This one.</a>`
+      q: "What's your energy building this whole thing?",
+      a: `<a href="https://youtu.be/54yKPwskCBg?t=5" target="_blank">Exactly this.</a>`
     },
     {
       q: "Why are Humanities results limited?",
-      a: "Data availability constraints. Also, the humanities section historically does not generate the level of competitive anxiety that warrants full documentation. This is not a moral judgement. It's a statistical observation."
+      a: "Data availability. Also, the humanities section historically does not generate the level of competitive anxiety that warrants full documentation. Not a moral judgement. A statistical observation."
     },
     {
       q: "Can I get removed from this?",
-      a: "This is public CBSE data. The dashboard doesn't create the data — it organises it. If you're uncomfortable seeing your publicly available result displayed in a cleaner format, that's a you problem, not a website problem."
+      a: "This is public CBSE data. The dashboard doesn't create it — it organises it. If you're uncomfortable seeing your publicly available result in a cleaner format, that's a you problem, not a website problem."
     },
     {
       q: "Are you coming back next year?",
@@ -2212,6 +2284,10 @@ function renderAbout() {
   <div class="about-hero">
     <h2>ABOUT THIS PROJECT</h2>
     <p>transparency · curiosity · minimal regret</p>
+    <p style="margin-top:10px;font-size:13px;color:var(--text2)" id="access-counter">loading access count...</p>
+  </div>
+  <div style="background:rgba(232,255,71,0.05);border:1px solid rgba(232,255,71,0.15);border-radius:6px;padding:12px 16px;margin-bottom:1.2rem;font-size:12px;color:var(--text3);font-family:'Space Mono',monospace;line-height:1.7;">
+    ⚠ The witty remarks on each student card are AI-generated. They are pattern-based, not personal. No targeted hatred, no inside jokes — just raw statistical context run through a language model. If yours stings, blame the algorithm. It doesn't know you.
   </div>
   ${faqs.map((f,i)=>`
   <div class="faq-item">
@@ -2223,6 +2299,7 @@ function renderAbout() {
   </div>`).join('')}
   `;
   document.getElementById('about-content').innerHTML = html;
+  loadAccessCount();
 }
 
 function toggleFaq(i) {
@@ -2283,6 +2360,92 @@ function renderMultiGrace() {
   }
   document.getElementById('multigrace-content').innerHTML = html;
 }
+
+// ============================================================
+// POLL — Firebase Realtime DB
+// ============================================================
+// STEP: Replace the config below with your Firebase project config
+const FIREBASE_DB_URL = 'https://results2026-c361a-default-rtdb.firebaseio.com'; // e.g. https://your-project-default-rtdb.firebaseio.com
+
+const POLL_IDS = ['poll-1','poll-2','poll-3','poll-4'];
+const POLL_LABELS = {
+  'poll-1': { fuh_nawh: '🔥 Fuh nawh', fuh_nawh_yellow: '💀 Fuh nawh (yellow)' },
+  'poll-2': { yes: '✅ Obviously', no: '💀 Touched grass too late' },
+  'poll-3': { yes: '🕊️ Yes somehow', no: '☠️ Already dead' },
+  'poll-4': { fire1: '🔥 Mid', fire2: '🔥🔥 Good', fire3: '🔥🔥🔥 Peak' }
+};
+
+const votedPolls = JSON.parse(localStorage.getItem('votedPolls') || '{}');
+
+async function vote(pollId, option) {
+  if (votedPolls[pollId] || FIREBASE_DB_URL === 'YOUR_DATABASE_URL') return;
+  try {
+    const path = `${FIREBASE_DB_URL}/polls/${pollId}/${option}.json`;
+    const cur = await fetch(path).then(r=>r.json());
+    await fetch(path, { method:'PUT', body: JSON.stringify((cur||0)+1) });
+    votedPolls[pollId] = option;
+    localStorage.setItem('votedPolls', JSON.stringify(votedPolls));
+    disablePollBtns(pollId);
+    loadPoll(pollId);
+  } catch(e) { console.error('Poll vote error', e); }
+}
+
+function disablePollBtns(pollId) {
+  document.querySelectorAll(`#${pollId} .poll-btn`).forEach(b => b.disabled = true);
+}
+
+async function loadPoll(pollId) {
+  if (FIREBASE_DB_URL === 'YOUR_DATABASE_URL') {
+    const el = document.getElementById(`results-${pollId}`);
+    if (el) el.innerHTML = '<span style="color:var(--text3)">⚠ Firebase not configured yet</span>';
+    return;
+  }
+  try {
+    const data = await fetch(`${FIREBASE_DB_URL}/polls/${pollId}.json`).then(r=>r.json()) || {};
+    const total = Object.values(data).reduce((a,b)=>a+b,0);
+    const el = document.getElementById(`results-${pollId}`);
+    if (!el) return;
+    if (total === 0) { el.innerHTML = 'no votes yet'; return; }
+    const labels = POLL_LABELS[pollId] || {};
+    el.innerHTML = Object.entries(data).map(([k,v]) => {
+      const pct = Math.round(v/total*100);
+      const lbl = labels[k] || k;
+      return `<div class="poll-bar-row">
+        <span class="poll-bar-label">${lbl}</span>
+        <div class="poll-bar-bg"><div class="poll-bar-fill" style="width:${pct}%"></div></div>
+        <span class="poll-bar-pct">${pct}% <span style="color:var(--text3)">(${v})</span></span>
+      </div>`;
+    }).join('');
+    if (votedPolls[pollId]) disablePollBtns(pollId);
+  } catch(e) { console.error('Poll load error', e); }
+}
+
+function initPolls() { POLL_IDS.forEach(loadPoll); }
+
+async function incrementAccessCount() {
+  if (FIREBASE_DB_URL === 'YOUR_DATABASE_URL') return;
+  try {
+    const url = `${FIREBASE_DB_URL}/meta/accessCount.json`;
+    const cur = await fetch(url).then(r=>r.json());
+    await fetch(url, { method:'PUT', body: JSON.stringify((cur||0)+1) });
+  } catch(e) {}
+}
+
+async function loadAccessCount() {
+  const el = document.getElementById('access-counter');
+  if (!el) return;
+  if (FIREBASE_DB_URL === 'YOUR_DATABASE_URL') { el.textContent = ''; return; }
+  try {
+    const count = await fetch(`${FIREBASE_DB_URL}/meta/accessCount.json`).then(r=>r.json());
+    el.textContent = count ? `${count} student${count===1?'':'s'} have accessed this` : '';
+  } catch(e) { el.textContent = ''; }
+}
+// Auto-refresh polls every 15s when on poll tab
+setInterval(() => {
+  if (document.getElementById('panel-poll')?.classList.contains('active')) {
+    POLL_IDS.forEach(loadPoll);
+  }
+}, 15000);
 
 // ============================================================
 // INIT
