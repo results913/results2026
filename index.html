@@ -1598,10 +1598,10 @@ function getRemark(student) {
     return `100 in ${SUB_NAMES[sub100.c]||'a subject'}. We get it. You studied. Congratulations on your social life's sacrifice.`;
   }
   if(allA1) return "All A1 grades. Either studied properly or found a very efficient way to study. Either way — noted.";
-  if(pct >= 85) return "Top-tier distribution. Statistically, this person was not spending 6 hours on Instagram.";
-  if(pct >= 75) return "Solid performance. No disasters, no miracles. Reliable output, like a government employee but faster.";
-  if(pct >= 65) return "Decent numbers. Could've been better, could've been much worse. Somewhere in the comfortable middle, which is fine until it isn't.";
-  if(pct >= 55) return "Average performance with selective excellence. Some subjects clearly received preferential treatment.";
+  if(pct >= 85) return "Hello";
+  if(pct >= 75) return "HI.";
+  if(pct >= 65) return "Hey";
+  if(pct >= 55) return "hai.";
   if(pct >= 45) {
     if(graceSubs.length >= 2) return "Passing in multiple subjects by the skin of theory marks. CBSE's generosity has been noted and will not be forgotten.";
     return "Below average, above disaster. A very specific zone to occupy. The subjects have been informed.";
@@ -1768,7 +1768,7 @@ function renderTop() {
 function renderBottom() {
   const sorted = [...students].sort((a,b)=>parseFloat(calcPct(a))-parseFloat(calcPct(b)));
   const bot10 = sorted.slice(0,10);
-  const shameEmojis = ['💀','☠️','🪦','😵','🤡','🫠','👻','😬','🙈','😶'];
+  const shameEmojis = ['💀','☠️','🪦','😵','🤡','🫠','🦴','😬','🙈','😶'];
   let html = `<div class="bot-header">
     <h2>Bottom 10 — Class of 2026</h2>
     <p>The complete class, ranked. These are the ones holding the floor down.</p>
@@ -1798,19 +1798,19 @@ function renderGrace() {
   }).filter(x => x.graceSubs.length > 0).sort((a,b)=>b.graceSubs.length-a.graceSubs.length);
 
   const roasts = [
-    "Theory mein itna scored — practical ne mercy dikhaayi, tujhe nahi.",
-    "23 leke pass? Bhai luck bhi thak gaya hoga.",
-    "Marks itne kam hain ki CBSE ko khud doubt hua pass karna chahiye ya nahi.",
-    "Theory paper dekh ke pencil ko bhi sharam aa gayi.",
-    "Ye score dekh ke examiner ne bhi ek baar aankhein band ki.",
-    "Grace marks hain ya divine intervention? CBSE ko bhi nahi pata.",
-    "Passing marks se sirf ek aage — ek aur galat answer aur history hoti.",
-    "Even a coin toss would've done better.",
-    "Bhai ye marks hain ya PIN code?",
-    "Pass hua, par kaise — ye toh CBSE ko bhi nahi pata.",
+    "Statistically Expected.",
+    "Merit Confirmed.",
+    "Academic Casualty.",
+    "WOW, kya ladka hai.",
+    "good.",
+    ".",
+    "good.",
+    "AI hu, kash andha hota in marks se acha.",
+    "Mera creator aise marks dikhwake mereko violate kar rha😭😭",
+    "Mereko Sam Altman ne ye witness krne ke liye nahi banaya.",
     "Theory marks itne low hain ki practical ne CPR kiya.",
     "Bhai tera result ek motivational poster ka villain ban sakta hai.",
-    "Marks itne edge pe hain — ek sneeze aur compartment hoti.",
+    "AI hu but ye bache hagne mai meri job khajayege.",
   ];
 
   let html = `<div class="roast-header">
@@ -2008,7 +2008,7 @@ const introSlides = [
   },
   {
     title: "Why This Exists",
-    text: "This project was created for transparency, curiosity, and a little chaos. A surprising number of people ask everyone else's marks while guarding their own like state secrets. This dashboard simply accelerates the process."
+    text: "This project was created for transparency, curiosity and just for fun. A surprising number of people ask everyone else's marks while guarding their own like state secrets. This dashboard simply accelerates the process."
   },
   {
     title: "Percentage Logic",
@@ -2016,7 +2016,7 @@ const introSlides = [
   },
   {
     title: "Coverage Notice",
-    text: "Not every student has been fully accounted for due to incomplete data availability. Humanities entries are also partially limited. The internet historically tends to spend less time debating humanities toppers anyway."
+    text: "Not every student has been fully accounted for due to incomplete data availability. Humanities entries are also partially limited. The internet historically tends to spend less time debating humanities toppers anyway. Waise bhi is batch ka hota to kuch nikal bhi pata , patani kitne naye bache hai."
   },
   {
     title: "AI Disclaimer",
@@ -2224,10 +2224,10 @@ function renderAbout() {
   const faqs = [
     {
       q: "Who made this?",
-      a: "Someone from this batch with too much time, a decent understanding of how CBSE result systems work, and absolutely no chill. The identity remains classified. Good luck figuring it out — this is a public school, not the Pentagon."
+      a: "Someone. The identity remains classified. "
     },
     {
-      q: "Is this legal?",
+      q: "Kaha se nikala?",
       a: "CBSE result data is publicly accessible. You've been able to check anyone's result for years — this just removes the friction. No private data was hacked, breached, or leaked. This is a convenience layer over public information, not a surveillance operation."
     },
     {
@@ -2244,7 +2244,7 @@ function renderAbout() {
     },
     {
       q: "Why should I trust these marks?",
-      a: "Cross-check with the official CBSE result portal if you want. The data here was collected and verified manually. Accuracy is high. If something looks off, assume a data entry edge case — not sabotage."
+      a: "Cross-check with the official CBSE result portal if you want. The data here was collected and verified manually. Accuracy is utmost priority set by the creator. No forging of data/marks, edge cases exists"
     },
     {
       q: "How is the percentage calculated?",
