@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Result Files 2026 — DAV Haldwani</title>
+<title>Result Files 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -538,14 +538,14 @@ body {
     <div style="text-align:center;margin-bottom:2rem;">
       <div style="font-size:32px;margin-bottom:8px;">📂</div>
       <h1 style="font-size:22px;font-weight:800;color:var(--accent);letter-spacing:-0.02em;">RESULT FILES 2026</h1>
-      <p style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px;">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</p>
+      <p style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px;">CLASS XII · 2026</p>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1.5rem;">
       <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Verification Required</div>
       <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1rem;line-height:1.6;">This is for identity verification only. Your admit card ID is <span style="color:var(--accent)">not stored</span> anywhere — not on a server, not in a database. The creator already has everyone's IDs. This gate just ensures only batch students get in.</div>
       <div style="margin-bottom:12px;">
         <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Space Mono',monospace;">Roll Number</label>
-        <input id="login-roll" type="text" placeholder="e.g. 25640515" style="width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:14px;padding:10px 12px;border-radius:4px;outline:none;" />
+        <input id="login-roll" type="text" placeholder="Your roll number" style="width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:'Space Mono',monospace;font-size:14px;padding:10px 12px;border-radius:4px;outline:none;" />
       </div>
       <div style="margin-bottom:16px;">
         <label style="font-size:11px;color:var(--text3);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;font-family:'Space Mono',monospace;">Admit Card ID</label>
@@ -554,7 +554,7 @@ body {
       <button onclick="attemptLogin()" style="width:100%;background:var(--accent);color:#0a0a0a;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;padding:12px;border:none;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;">Verify &amp; Enter</button>
       <div id="login-error" style="font-size:12px;color:var(--red);text-align:center;margin-top:10px;font-family:'Space Mono',monospace;min-height:16px;"></div>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);text-align:center;">
-        <span style="font-size:11px;color:var(--text3);">Don't have access? This dashboard is for DAV Haldwani Class XII students only.</span>
+        <span style="font-size:11px;color:var(--text3);">Access is for batch students only.</span>
       </div>
     </div>
   </div>
@@ -578,7 +578,7 @@ body {
 <div class="header" id="main-header" style="display:none;">
   <div class="header-top">
     <h1>RESULT FILES 2026</h1>
-    <span class="header-sub">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</span>
+    <span class="header-sub" id="header-sub">DAV CENTENARY PUBLIC SCHOOL · HALDWANI</span>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('search',this)">🔍 Search</button>
@@ -1637,7 +1637,10 @@ function buildCard(student, expandByDefault=true) {
   const bo = getBestOpt(student);
   const allSubs = student.subs.filter(s=>!INTERNAL.includes(s.c));
   const subsHtml = allSubs.map(s=>buildSubCell(s,bo,cores)).join('');
-  const nickname = student.nickname ? ` <span style="font-size:11px;color:var(--text3);font-weight:400">(${student.nickname})</span>` : '';
+  const idx = students.indexOf(student);
+  const displayName = DEMO_MODE ? demoName(idx) : student.name;
+  const displayRoll = DEMO_MODE ? '████████' : student.roll;
+  const nickname = (!DEMO_MODE && student.nickname) ? ` <span style="font-size:11px;color:var(--text3);font-weight:400">(${student.nickname})</span>` : '';
   const resultLabel = student.result === 'ESSENTIAL REPEAT' ? 'ESS. REPEAT' : student.result;
   const remark = getRemark(student);
 
@@ -1646,8 +1649,8 @@ function buildCard(student, expandByDefault=true) {
       <div class="card-left">
         <div class="stream-dot dot-${student.stream}"></div>
         <div>
-          <div class="card-name">${student.name}${nickname}</div>
-          <div class="card-meta">Roll: ${student.roll} · <span class="stream-tag st-${student.stream}">${student.stream}</span></div>
+          <div class="card-name">${displayName}${nickname}</div>
+          <div class="card-meta">Roll: ${displayRoll} · <span class="stream-tag st-${student.stream}">${student.stream}</span></div>
         </div>
       </div>
       <div class="card-right">
@@ -1714,9 +1717,12 @@ function renderAll() {
     list.forEach(s => {
       const pct = calcPct(s);
       const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS.REP':s.result;
-      html += `<div class="all-row" onclick="jumpToSearch('${s.name}','${s.roll}')">
+      const idx = students.indexOf(s);
+      const displayName = DEMO_MODE ? demoName(idx) : s.name;
+      const nickSpan = (!DEMO_MODE && s.nickname) ? ` <span style="font-size:10px;color:var(--text3)">(${s.nickname})</span>` : '';
+      html += `<div class="all-row" onclick="${DEMO_MODE ? '' : `jumpToSearch('${s.name}','${s.roll}')`}">
         <div class="stream-dot dot-${stream}"></div>
-        <div class="all-name">${s.name}${s.nickname?` <span style="font-size:10px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
+        <div class="all-name">${displayName}${nickSpan}</div>
         <div class="all-pct ${pctClass(pct)}">${pct}%</div>
         <div class="all-result ${rbClass(s.result)}">${resultLabel}</div>
       </div>`;
@@ -1750,11 +1756,15 @@ function renderTop() {
     const pct = calcPct(s);
     const medal = i<3 ? medals[i] : `#${i+1}`;
     const cls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
-    html += `<div class="rank-card" onclick="jumpToSearch('${s.name}','${s.roll}')">
+    const idx = students.indexOf(s);
+    const displayName = DEMO_MODE ? demoName(idx) : s.name;
+    const displayRoll = DEMO_MODE ? '████████' : s.roll;
+    const nickSpan = (!DEMO_MODE && s.nickname) ? ` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>` : '';
+    html += `<div class="rank-card" onclick="${DEMO_MODE ? '' : `jumpToSearch('${s.name}','${s.roll}')`}">
       <div class="rank-num ${cls}">${medal}</div>
       <div class="rank-info">
-        <div class="rank-name">${s.name}${s.nickname?` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
-        <div class="rank-sub">${s.stream} · Roll ${s.roll}</div>
+        <div class="rank-name">${displayName}${nickSpan}</div>
+        <div class="rank-sub">${s.stream} · Roll ${displayRoll}</div>
       </div>
       <div class="rank-pct ${pctClass(pct)}">${pct}%</div>
     </div>`;
@@ -1776,10 +1786,13 @@ function renderBottom() {
   bot10.forEach((s,i) => {
     const pct = calcPct(s);
     const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
-    html += `<div class="rank-card" onclick="jumpToSearch('${s.name}','${s.roll}')">
+    const idx = students.indexOf(s);
+    const displayName = DEMO_MODE ? demoName(idx) : s.name;
+    const nickSpan = (!DEMO_MODE && s.nickname) ? ` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>` : '';
+    html += `<div class="rank-card" onclick="${DEMO_MODE ? '' : `jumpToSearch('${s.name}','${s.roll}')`}">
       <div class="rank-num rank-shame">${shameEmojis[i]}</div>
       <div class="rank-info">
-        <div class="rank-name">${s.name}${s.nickname?` <span style="font-size:11px;color:var(--text3)">(${s.nickname})</span>`:''}</div>
+        <div class="rank-name">${displayName}${nickSpan}</div>
         <div class="rank-sub">${s.stream} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
       </div>
       <div class="rank-pct pct-fail">${pct}%</div>
@@ -1822,11 +1835,14 @@ function renderGrace() {
     const s = x.student;
     const roast = roasts[i % roasts.length];
     const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
+    const idx = students.indexOf(s);
+    const displayName = DEMO_MODE ? demoName(idx) : s.name;
+    const displayRoll = DEMO_MODE ? '████████' : s.roll;
     html += `<div class="grace-card">
       <div class="grace-card-header">
         <div>
-          <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
-          <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll}</div>
+          <div class="grace-name">${displayName} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${displayRoll}</div>
         </div>
         <div class="grace-count">${x.graceSubs.length} subject${x.graceSubs.length>1?'s':''} 🃏</div>
       </div>
@@ -1872,11 +1888,14 @@ function renderMultiGrace() {
       const roast = multiRoasts[i % multiRoasts.length];
       const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
       const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
+      const idx = students.indexOf(s);
+      const displayName = DEMO_MODE ? demoName(idx) : s.name;
+      const displayRoll = DEMO_MODE ? '████████' : s.roll;
       html += `<div class="grace-card" style="border-color:rgba(255,68,68,0.35)">
         <div class="grace-card-header">
           <div>
-            <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
-            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
+            <div class="grace-name">${displayName} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${displayRoll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
           </div>
           <div class="grace-count">${x.graceSubs.length} subjects 🤡</div>
         </div>
@@ -1921,24 +1940,26 @@ function switchTabById(name) {
 }
 
 // ============================================================
+// DEMO MODE
+// ============================================================
+const DEMO_ROLL = '12345678';
+const DEMO_ADMIT = 'AB123456';
+let DEMO_MODE = false;
+
+function demoName(index) { return `Student #${index + 1}`; }
+
+// ============================================================
 // LOGIN GATE
 // ============================================================
-// Admit card map: roll -> admit card id (lowercase for comparison)
 const ADMIT_MAP = {};
-students.forEach(s => { ADMIT_MAP[s.roll] = s.roll.slice(-4); }); // last 4 digits as a simple gate
+students.forEach(s => { ADMIT_MAP[s.roll] = s.roll.slice(-4); });
 
-// Real admit card structure: [dad surname 2nd last letter][mom surname last letter][last 2 digits roll][4 digit school code]
-// For gate purposes we use a simplified check: just roll + any non-empty admit card that starts with 2 letters and has 6 digits
-// This lets any student with valid roll + their real admit card id through
 function validateAdmitCard(roll, admit) {
   admit = admit.trim().toUpperCase();
   if(!ADMIT_MAP[roll]) return false;
-  // Accept if: length 8, first 2 chars letters, next 6 digits, last 4 match school code
   if(admit.length !== 8) return false;
   if(!/^[A-Z]{2}\d{6}$/.test(admit)) return false;
-  // Last 4 digits must match school pattern (same for all DAV Haldwani students: 4534)
-  // We'll store this as the known suffix
-  const knownSuffix = '8141'; // DAV Haldwani school batch code
+  const knownSuffix = '8141';
   return admit.slice(4) === knownSuffix;
 }
 
@@ -1948,7 +1969,7 @@ const MAX_ATTEMPTS = 3;
 function attemptLogin() {
   if(loginAttempts >= MAX_ATTEMPTS) return;
   const roll = document.getElementById('login-roll').value.trim();
-  const admit = document.getElementById('login-admit').value.trim();
+  const admit = document.getElementById('login-admit').value.trim().toUpperCase();
   const errEl = document.getElementById('login-error');
 
   if(!roll || !admit) {
@@ -1956,12 +1977,21 @@ function attemptLogin() {
     return;
   }
 
+  // Demo credential — anonymous/Reddit access
+  if(roll === DEMO_ROLL && admit === DEMO_ADMIT) {
+    DEMO_MODE = true;
+    try { localStorage.setItem('rf26_verified', 'demo'); } catch(e){}
+    incrementAccessCount('demo');
+    document.getElementById('login-gate').style.display = 'none';
+    showIntroSlides();
+    return;
+  }
+
   const valid = validateAdmitCard(roll, admit) && ADMIT_MAP[roll];
 
   if(valid) {
-    // Mark as verified in localStorage
     try { localStorage.setItem('rf26_verified', '1'); } catch(e){}
-    incrementAccessCount();
+    incrementAccessCount('school');
     document.getElementById('login-gate').style.display = 'none';
     showIntroSlides();
   } else {
@@ -1989,7 +2019,14 @@ document.addEventListener('keydown', e => {
 // Check if already verified this session
 function checkExistingSession() {
   try {
-    if(localStorage.getItem('rf26_verified') === '1') {
+    const v = localStorage.getItem('rf26_verified');
+    if(v === 'demo') {
+      DEMO_MODE = true;
+      document.getElementById('login-gate').style.display = 'none';
+      showIntroSlides();
+      return true;
+    }
+    if(v === '1') {
       document.getElementById('login-gate').style.display = 'none';
       showIntroSlides();
       return true;
@@ -2073,6 +2110,13 @@ function introNav(dir) {
 function showDashboard() {
   document.getElementById('main-header').style.display = 'block';
   document.getElementById('main-content').style.display = 'block';
+  if(DEMO_MODE) {
+    document.getElementById('header-sub').textContent = 'CLASS XII · 2026';
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:rgba(232,255,71,0.08);border-bottom:1px solid rgba(232,255,71,0.2);padding:8px 1.5rem;font-size:11px;font-family:"Space Mono",monospace;color:var(--accent);text-align:center;letter-spacing:0.04em;';
+    banner.textContent = '⚠ DEMO MODE — Names and roll numbers are redacted. All marks, stats and polls are real.';
+    document.getElementById('main-header').prepend(banner);
+  }
 }
 
 // ============================================================
@@ -2103,6 +2147,11 @@ function handleSearch() {
   const q = document.getElementById('search-input').value.trim().toLowerCase();
   const area = document.getElementById('search-results');
   if(!q || q.length < 3) { area.innerHTML=''; return; }
+
+  if(DEMO_MODE) {
+    area.innerHTML = `<div class="empty-state"><div>🔍</div><p>Search by name is disabled in demo mode. Browse All Students or Top/Bottom tabs.</p></div>`;
+    return;
+  }
 
   const matches = students.filter(s => s.name.toLowerCase().includes(q));
   if(!matches.length) {
@@ -2350,11 +2399,14 @@ function renderMultiGrace() {
       const line = analyticalLines[i % analyticalLines.length];
       const subTags = x.graceSubs.map(sub=>`<span class="grace-sub-tag">${SUB_NAMES[sub.c]||sub.c}: ${sub.th} theory</span>`).join('');
       const resultLabel = s.result==='ESSENTIAL REPEAT'?'ESS. REPEAT':s.result;
+      const idx = students.indexOf(s);
+      const displayName = DEMO_MODE ? demoName(idx) : s.name;
+      const displayRoll = DEMO_MODE ? '████████' : s.roll;
       html += `<div class="grace-card" style="border-color:rgba(255,136,68,0.25)">
         <div class="grace-card-header">
           <div>
-            <div class="grace-name">${s.name} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
-            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${s.roll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
+            <div class="grace-name">${displayName} <span class="stream-tag st-${s.stream}">${s.stream}</span></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;font-family:'Space Mono',monospace">Roll: ${displayRoll} · <span class="result-badge ${rbClass(s.result)}">${resultLabel}</span></div>
           </div>
           <div class="grace-count">${x.graceSubs.length} subjects</div>
         </div>
@@ -2427,10 +2479,11 @@ async function loadPoll(pollId) {
 
 function initPolls() { POLL_IDS.forEach(loadPoll); }
 
-async function incrementAccessCount() {
+async function incrementAccessCount(type) {
   if (FIREBASE_DB_URL === 'YOUR_DATABASE_URL') return;
   try {
-    const url = `${FIREBASE_DB_URL}/meta/accessCount.json`;
+    const key = type === 'demo' ? 'demoCount' : 'schoolCount';
+    const url = `${FIREBASE_DB_URL}/meta/${key}.json`;
     const cur = await fetch(url).then(r=>r.json());
     await fetch(url, { method:'PUT', body: JSON.stringify((cur||0)+1) });
   } catch(e) {}
@@ -2441,8 +2494,14 @@ async function loadAccessCount() {
   if (!el) return;
   if (FIREBASE_DB_URL === 'YOUR_DATABASE_URL') { el.textContent = ''; return; }
   try {
-    const count = await fetch(`${FIREBASE_DB_URL}/meta/accessCount.json`).then(r=>r.json());
-    el.textContent = count ? `${count} student${count===1?'':'s'} have accessed this` : '';
+    const [school, demo] = await Promise.all([
+      fetch(`${FIREBASE_DB_URL}/meta/schoolCount.json`).then(r=>r.json()),
+      fetch(`${FIREBASE_DB_URL}/meta/demoCount.json`).then(r=>r.json())
+    ]);
+    const s = school || 0;
+    const d = demo || 0;
+    if(s === 0 && d === 0) { el.textContent = ''; return; }
+    el.textContent = `${s} school user${s===1?'':'s'} · ${d} anonymous`;
   } catch(e) { el.textContent = ''; }
 }
 // Auto-refresh polls every 15s when on poll tab
